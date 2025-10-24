@@ -3,7 +3,7 @@ import time
 import sys
 
 # --- CONFIGURACIÓN DE LA CONSOLA PARA UNA MEJOR EXPERIENCIA ---
-def imprimir_pausado(texto, pausa=0.03):
+def imprimir_pausado(texto, pausa=0.05):
     """Imprime el texto letra por letra para un efecto narrativo."""
     for caracter in texto:
         sys.stdout.write(caracter)
@@ -57,7 +57,7 @@ CASOS = [
 def narrar_introduccion():
     """Muestra la historia de inicio completa."""
     print("=" * 70)
-    imprimir_pausado("          CLUE: PRETTY LITTLE SECRETS - EL SISTEMA EXPERTO          ", 0.01)
+    imprimir_pausado("          CLUE: PRETTY LITTLE SECRETS       ", 0.01)
     print("=" * 70)
     time.sleep(1)
     
@@ -250,4 +250,3 @@ def jugar():
 # --- EJECUCIÓN ---
 if __name__ == "__main__":
     jugar()
-    
