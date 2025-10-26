@@ -43,7 +43,7 @@
   }
   .panel h2{ margin:0 0 10px; font-size:16px; letter-spacing:.3px; color:#c7d2fe }
   .story{
-    background:#0c1230; border:1px dashed #243073; border-radius:12px; padding:14px; line-height:1.45;
+    background:#0c1230; border:1px dashed #243073; border-radius:12px; padding:14px; line-height:1.48;
   }
   .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
   .btn{
@@ -80,7 +80,6 @@
   }
   .log{ margin-top:8px; font-size:.9rem; color:#9aa6d1 }
   footer{ margin-top:16px; font-size:.85rem; color:#8b95bd; text-align:center }
-  /* Pills */
   .pill{ display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; font-size:.8rem;
     background:#0f1636; border:1px solid #2a3576; color:#c7cffc }
 </style>
@@ -134,8 +133,9 @@
           <button id="btnVerificar" class="btn good">✅ Verificar</button>
           <button id="btnLimpiar" class="btn bad">♻️ Limpiar selección</button>
         </div>
-        <div style="margin-top:10px">
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
           <span class="pill" id="pillEstado">Caso sin resolver</span>
+          <span class="pill" id="pillIntentos">Intentos: 0/3</span>
         </div>
       </aside>
     </div>
@@ -176,12 +176,16 @@ let casoSecreto = null;
 let poolPistas = [];     // pistas únicas preconstruidas por caso
 let pistasRestantes = 0;
 
+const INTENTOS_MAX = 3;
+let intentosUsados = 0;
+
 const el = {
   historia:  document.getElementById('historia'),
   pistas:    document.getElementById('pistas'),
   res:       document.getElementById('resultado'),
   log:       document.getElementById('log'),
   pill:      document.getElementById('pillEstado'),
+  pillTry:   document.getElementById('pillIntentos'),
   sOps:      document.getElementById('opcSospechosas'),
   aOps:      document.getElementById('opcArmas'),
   lOps:      document.getElementById('opcLugares'),
@@ -196,22 +200,22 @@ function log(m){ el.log.innerHTML = `<div>• ${m}</div>` + el.log.innerHTML; }
 const aleatorio = arr => arr[Math.floor(Math.random()*arr.length)];
 
 /* =========================
-   Narrativa inicial
+   Narrativa inicial (carta de –A)
    ========================= */
 function narrativaInicial(){
   return `
-  <b>Rosewood, noche de tormenta.</b> Las cinco amigas se reúnen en el granero de Spencer para una pijamada.
-  Alison llega última, trae alcohol; la luz parpadea y, tras dormitar, al despertar <b>Alison ya no está</b>.
-  Spencer asegura haber salido a buscarla y haber oído un grito. El caso se “enfría”, hasta que un año después
-  aparece un cuerpo y pistas que sugieren que no fue un accidente. Todas guardan secretos que Alison conocía:
-  <ul style="margin:.4rem 0 .2rem 1.2rem">
-    <li><b>Spencer</b>: la vio besando al novio de su hermana.</li>
-    <li><b>Emily</b>: su sexualidad, y el juego de coqueteo/confusión de Alison.</li>
-    <li><b>Aria</b>: sabía de la infidelidad del padre de Aria.</li>
-    <li><b>Hanna</b>: los apodos y presión que la llevaron a desórdenes alimenticios.</li>
-    <li><b>Todo el grupo</b>: el “accidente” que dejó ciega a Jenna.</li>
-  </ul>
-  Y alguien más sabe todo: <b>"A"</b>. ¿Quién fue? ¿Con qué arma? ¿Dónde? <i>Resuelve el caso.</i>
+  <b>Rosewood, noche de tormenta.</b> Tú eres el detective a cargo cuando, un año
+  después de la desaparición de Alison, llega una carta anónima:
+  <div style="margin:.7rem 0; padding:.7rem .9rem; border:1px dashed #334; background:#0a1030; border-radius:10px; line-height:1.5">
+    “Detective,<br>
+    el caso que dejaron dormir no está muerto. Yo sé dónde yacieron sus restos
+    y quién movió las piezas. Conozco los secretos de sus amigas: Spencer,
+    Emily, Aria y Hanna… secretos que Alison usaba para manejarlas. Si quieres
+    la verdad, sígueme el juego. Te daré <b>pistas</b>. Si fallas, sabré que no estás
+    a mi altura. — <b>A</b>”
+  </div>
+  Todas tenían motivos. Y alguien más lo sabe todo: <b>“A”</b>. ¿Quién fue? ¿Con qué arma?
+  ¿Dónde? <i>Resuelve el caso con solo tres intentos.</i>
   `;
 }
 
@@ -245,7 +249,7 @@ function limpiarSeleccion(){
 }
 
 /* =========================
-   Pistas únicas por caso
+   Pistas únicas por caso (firmadas por –A)
    ========================= */
 function construirPistas(caso){
   const { culpable, arma, lugar } = caso;
@@ -253,40 +257,40 @@ function construirPistas(caso){
 
   // culpable
   if (culpable==='spencer'){
-    banco.add('Se percibe <b>perfume caro</b> y barro fino de jardines cuidados.');
-    banco.add('Huella pequeña pero firme junto a una cerca del granero.');
+    banco.add('<b>-A</b>: Se percibe <b>perfume caro</b> y barro de jardines cuidados.');
+    banco.add('<b>-A</b>: Huella pequeña pero firme junto a la cerca del granero.');
   }
   if (culpable==='emily'){
-    banco.add('Rastro de <b>cloro de alberca</b> en una sudadera.');
-    banco.add('Una nota arrugada dice: “No sé cómo decirlo… —E”.');
+    banco.add('<b>-A</b>: Rastro de <b>cloro de alberca</b> en una sudadera.');
+    banco.add('<b>-A</b>: Una nota arrugada: “No sé cómo decirlo… —E”.');
   }
   if (culpable==='aria'){
-    banco.add('Papel de diario con <b>tinta fresca</b> en el bolsillo de alguien.');
-    banco.add('Discusión sobre <b>un secreto familiar</b> escuchada cerca.');
+    banco.add('<b>-A</b>: Papel de diario con <b>tinta fresca</b> en un bolsillo.');
+    banco.add('<b>-A</b>: Se discutía sobre <b>un secreto familiar</b> cerca de la escena.');
   }
   if (culpable==='hanna'){
-    banco.add('Envoltorio de <b>caramelo dietético</b> cerca del lugar.');
-    banco.add('Huellas de <b>tacones</b> que van y vienen con nerviosismo.');
+    banco.add('<b>-A</b>: Envoltorio de <b>caramelo dietético</b> hallado en el suelo.');
+    banco.add('<b>-A</b>: Huellas de <b>tacones</b> que van y vienen con nerviosismo.');
   }
   if (culpable==='mona'){
-    banco.add('Un pendiente con inicial <b>M</b> y una pieza electrónica alterada.');
-    banco.add('Alguien parecía <b>vigilar cada movimiento</b> del grupo.');
+    banco.add('<b>-A</b>: Un pendiente con la inicial <b>M</b> y un chip alterado.');
+    banco.add('<b>-A</b>: Alguien <b>vigiló cada movimiento</b> del grupo aquella noche.');
   }
 
   // arma
-  if (arma==='pala')       banco.add('Tierra removida y marcas rectas, como de una <b>pala</b>.');
-  if (arma==='piedra')     banco.add('Polvo de <b>piedra</b> en una manga.');
-  if (arma==='petardos')   banco.add('Ligero olor a <b>pólvora</b> invade la zona.');
-  if (arma==='bate')       banco.add('Una marca curva en madera que sugiere un <b>bate</b>.');
-  if (arma==='somniferos') banco.add('Sobrecito con <b>pastillas trituradas</b> y un vaso desechable.');
+  if (arma==='pala')       banco.add('<b>-A</b>: Tierra removida y marcas rectas, de una <b>pala</b>.');
+  if (arma==='piedra')     banco.add('<b>-A</b>: Polvo de <b>piedra</b> en una manga.');
+  if (arma==='petardos')   banco.add('<b>-A</b>: Ligero olor a <b>pólvora</b> en el aire.');
+  if (arma==='bate')       banco.add('<b>-A</b>: Una marca curva en madera sugiere un <b>bate</b>.');
+  if (arma==='somniferos') banco.add('<b>-A</b>: Vaso con <b>pastillas trituradas</b> en el borde.');
 
   // lugar
-  if (lugar==='granero')   banco.add('Golpe sordo dentro del <b>granero</b> en plena noche.');
-  if (lugar==='patio')     banco.add('Luz parpadeante en el <b>patio de los DiLaurentis</b>.');
-  if (lugar==='escuela')   banco.add('Sombra captada en la <b>escuela</b> por una cámara.');
-  if (lugar==='parque')    banco.add('Hojas trituradas y suelo húmedo en el <b>parque</b>.');
-  if (lugar==='casaMona')  banco.add('Música a bajo volumen en la <b>casa de Mona</b>.');
-  
+  if (lugar==='granero')   banco.add('<b>-A</b>: Se oyó un golpe sordo dentro del <b>granero</b>.');
+  if (lugar==='patio')     banco.add('<b>-A</b>: La luz parpadeaba en el <b>patio de los DiLaurentis</b>.');
+  if (lugar==='escuela')   banco.add('<b>-A</b>: La cámara captó una sombra en la <b>escuela</b>.');
+  if (lugar==='parque')    banco.add('<b>-A</b>: Hojas trituradas y suelo húmedo en el <b>parque</b>.');
+  if (lugar==='casaMona')  banco.add('<b>-A</b>: Música baja provenía de la <b>casa de Mona</b>.');
+
   // mezclar (Fisher–Yates)
   const arr = Array.from(banco);
   for (let i = arr.length - 1; i > 0; i--) {
@@ -294,6 +298,23 @@ function construirPistas(caso){
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
+}
+
+/* =========================
+   Utilidad intentos
+   ========================= */
+function actualizarPills(){
+  el.pillTry.textContent = `Intentos: ${intentosUsados}/${INTENTOS_MAX}`;
+}
+function bloquearPorFallo(){
+  el.btnVer.disabled = true;
+  el.btnPista.disabled = true;
+  el.pill.textContent = 'Caso fallido';
+  el.pill.style.background = '#3f1d1d';
+}
+function desbloquearControles(){
+  el.btnVer.disabled = false;
+  el.btnPista.disabled = false;
 }
 
 /* =========================
@@ -309,7 +330,10 @@ function nuevoCaso(){
   poolPistas = construirPistas(casoSecreto);
   pistasRestantes = poolPistas.length;
 
-  // reset UI
+  // reset intentos y UI
+  intentosUsados = 0;
+  actualizarPills();
+
   el.pistas.innerHTML = '';
   el.res.classList.remove('ok','bad');
   el.res.innerHTML = '<span class="muted">Aún no has verificado tu hipótesis.</span>';
@@ -318,6 +342,7 @@ function nuevoCaso(){
   el.pill.style.background = '#0f1636';
   el.log.innerHTML = '';
   limpiarSeleccion();
+  desbloquearControles();
   log(`Nuevo caso creado. Pistas disponibles: ${pistasRestantes}.`);
 }
 
@@ -326,7 +351,7 @@ function generarPista(){
     log('No quedan más pistas.');
     const fin = document.createElement('div');
     fin.className = 'hint small';
-    fin.innerHTML = '🔎 Ya viste todas las pistas de este caso.';
+    fin.innerHTML = '🔎 <b>-A</b>: Ya viste todo lo que necesitas. ¿Puedes con esto, detective?';
     el.pistas.prepend(fin);
     return;
   }
@@ -341,6 +366,8 @@ function generarPista(){
 }
 
 function verificar(){
+  if (el.btnVer.disabled) return;
+
   const sel = getSeleccion();
   if (!sel.sus || !sel.arm || !sel.lug){
     el.res.classList.remove('ok','bad');
@@ -357,21 +384,40 @@ function verificar(){
     el.res.classList.remove('bad'); el.res.classList.add('ok');
     el.res.innerHTML = `
       ✅ <b>¡Acertaste!</b><br>
-      Culpable: <b>${nSus}</b> · Arma: <b>${nArm}</b> · Lugar: <b>${nLug}</b>.
-      <div class="muted" style="margin-top:6px">Puedes iniciar un nuevo caso para otro final.</div>
+      Culpable: <b>${nSus}</b> · Arma: <b>${nArm}</b> · Lugar: <b>${nLug}</b>.<br>
+      <span class="muted">Puedes iniciar un nuevo caso para otro final.</span>
     `;
     el.pill.textContent = 'Caso resuelto';
     el.pill.style.background = '#0c4a3e';
     log('Hipótesis CORRECTA.');
-  }else{
+    el.btnVer.disabled = true; // ya no hace falta verificar más
+    return;
+  }
+
+  // Incorrecto: consumir intento
+  intentosUsados++;
+  actualizarPills();
+
+  const quedan = INTENTOS_MAX - intentosUsados;
+  if (quedan > 0){
     el.res.classList.remove('ok'); el.res.classList.add('bad');
     el.res.innerHTML = `
-      ❌ <b>No coincide.</b> Tu hipótesis no es correcta.<br>
-      Sigue recolectando pistas o pulsa <b>Revelar solución</b>.
+      ❌ <b>No coincide.</b> <b>-A</b>: Oh, detective… ¿eso era todo?<br>
+      Te quedan <b>${quedan}</b> intento(s). Reúne más pistas o ajusta tu hipótesis.
     `;
     el.pill.textContent = 'Caso sin resolver';
     el.pill.style.background = '#0f1636';
-    log('Hipótesis INCORRECTA.');
+    log(`Hipótesis incorrecta. Quedan ${quedan} intento(s).`);
+  } else {
+    // Sin intentos: fallo definitivo
+    el.res.classList.remove('ok'); el.res.classList.add('bad');
+    el.res.innerHTML = `
+      ❌ <b>Fallaste.</b><br>
+      <b>-A</b>: Qué pena, detective. Metiste a la persona equivocada a la cárcel.<br>
+      <span class="muted">Caso cerrado. Puedes <b>Revelar solución</b> o iniciar un <b>Nuevo caso</b>.</span>
+    `;
+    bloquearPorFallo();
+    log('Sin intentos: caso fallido.');
   }
 }
 
@@ -402,6 +448,17 @@ document.getElementById('btnVerificar').addEventListener('click', verificar);
 document.getElementById('btnLimpiar').addEventListener('click', limpiarSeleccion);
 
 /* Init */
+function pintarOpciones(){
+  const mk = (name, list) => list.map(o => `
+    <label class="opt">
+      <input type="radio" name="${name}" value="${o.id}" />
+      <span><b>${o.nombre}</b><br><span class="muted">${o.detalle || ''}</span></span>
+    </label>
+  `).join('');
+  el.sOps.innerHTML = mk('sus', sospechosas);
+  el.aOps.innerHTML = mk('arm', armas);
+  el.lOps.innerHTML = mk('lug', lugares);
+}
 pintarOpciones();
 nuevoCaso();
 </script>
