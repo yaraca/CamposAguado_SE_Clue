@@ -134,8 +134,9 @@
           <button id="btnVerificar" class="btn good">✅ Verificar</button>
           <button id="btnLimpiar" class="btn bad">♻️ Limpiar selección</button>
         </div>
-        <div style="margin-top:10px">
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
           <span class="pill" id="pillEstado">Caso sin resolver</span>
+          <span class="pill" id="pillIntentos">Intentos: 0/4</span>
         </div>
       </aside>
     </div>
@@ -175,6 +176,8 @@ const lugares = [
 let casoSecreto = null;
 let poolPistas = [];     // pistas únicas preconstruidas por caso
 let pistasRestantes = 0;
+const INTENTOS_MAX = 4;
+let intentosUsados = 0;
 
 const el = {
   historia:  document.getElementById('historia'),
@@ -182,6 +185,7 @@ const el = {
   res:       document.getElementById('resultado'),
   log:       document.getElementById('log'),
   pill:      document.getElementById('pillEstado'),
+  pillTry:   document.getElementById('pillIntentos'),
   sOps:      document.getElementById('opcSospechosas'),
   aOps:      document.getElementById('opcArmas'),
   lOps:      document.getElementById('opcLugares'),
@@ -240,8 +244,6 @@ function limpiarSeleccion(){
   document.querySelectorAll('input[type="radio"]').forEach(r => r.checked=false);
   el.res.classList.remove('ok','bad');
   el.res.innerHTML = 'Selección limpiada. Vuelve a intentarlo.';
-  el.pill.textContent = 'Caso sin resolver';
-  el.pill.style.background = '#0f1636';
 }
 
 /* =========================
@@ -299,8 +301,24 @@ function construirPistas(caso){
 /* =========================
    Flujo del caso
    ========================= */
+function actualizarPills(){
+  el.pillTry.textContent = `Intentos: ${intentosUsados}/${INTENTOS_MAX}`;
+}
+
+function bloquearPorFallo(){
+  el.btnVer.disabled = true;
+  el.btnPista.disabled = true;
+  el.pill.textContent = 'Caso fallido';
+  el.pill.style.background = '#3f1d1d';
+}
+
+function desbloquearControles(){
+  el.btnVer.disabled = false;
+  el.btnPista.disabled = false;
+}
+
 function nuevoCaso(){
-  const culp = aleatorio(sospechosas).id;
+  const culp = aleatorio(suspechosas).id;
   const arm  = aleatorio(armas).id;
   const lug  = aleatorio(lugares).id;
   casoSecreto = { culpable:culp, arma:arm, lugar:lug };
@@ -309,7 +327,10 @@ function nuevoCaso(){
   poolPistas = construirPistas(casoSecreto);
   pistasRestantes = poolPistas.length;
 
-  // reset UI
+  // reset intentos y UI
+  intentosUsados = 0;
+  actualizarPills();
+
   el.pistas.innerHTML = '';
   el.res.classList.remove('ok','bad');
   el.res.innerHTML = '<span class="muted">Aún no has verificado tu hipótesis.</span>';
@@ -318,6 +339,7 @@ function nuevoCaso(){
   el.pill.style.background = '#0f1636';
   el.log.innerHTML = '';
   limpiarSeleccion();
+  desbloquearControles();
   log(`Nuevo caso creado. Pistas disponibles: ${pistasRestantes}.`);
 }
 
@@ -341,6 +363,8 @@ function generarPista(){
 }
 
 function verificar(){
+  if (el.btnVer.disabled) return;
+
   const sel = getSeleccion();
   if (!sel.sus || !sel.arm || !sel.lug){
     el.res.classList.remove('ok','bad');
@@ -363,15 +387,33 @@ function verificar(){
     el.pill.textContent = 'Caso resuelto';
     el.pill.style.background = '#0c4a3e';
     log('Hipótesis CORRECTA.');
-  }else{
+    el.btnVer.disabled = true; // ya no hace falta verificar más
+    return;
+  }
+
+  // Incorrecto: consumir intento
+  intentosUsados++;
+  actualizarPills();
+
+  const quedan = INTENTOS_MAX - intentosUsados;
+  if (quedan > 0){
     el.res.classList.remove('ok'); el.res.classList.add('bad');
     el.res.innerHTML = `
-      ❌ <b>No coincide.</b> Tu hipótesis no es correcta.<br>
-      Sigue recolectando pistas o pulsa <b>Revelar solución</b>.
+      ❌ <b>No coincide.</b> Te quedan <b>${quedan}</b> intento(s).<br>
+      Sigue recolectando pistas o ajusta tu hipótesis.
     `;
     el.pill.textContent = 'Caso sin resolver';
     el.pill.style.background = '#0f1636';
-    log('Hipótesis INCORRECTA.');
+    log(`Hipótesis incorrecta. Quedan ${quedan} intento(s).`);
+  } else {
+    // Sin intentos: fallo definitivo
+    el.res.classList.remove('ok'); el.res.classList.add('bad');
+    el.res.innerHTML = `
+      ❌ <b>Fallaste.</b> <b>A</b> demostró que llevaste a la persona incorrecta a la cárcel.<br>
+      <span class="muted">Caso cerrado. Inicia un <b>Nuevo caso</b> para intentarlo otra vez.</span>
+    `;
+    bloquearPorFallo();
+    log('Sin intentos: caso fallido.');
   }
 }
 
