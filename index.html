@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clue — Pretty Little Liars (Piloto)</title>
+<style>
+  :root{
+    --bg1:#0b1220; --bg2:#111a2e; --card:#0f172a; --accent:#8b5cf6; --accent2:#22d3ee;
+    --text:#e5e7eb; --muted:#94a3b8; --good:#22c55e; --bad:#ef4444; --warn:#f59e0b;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--text); background:radial-gradient(1200px 600px at 20% -10%, #1f2357 0%, #0b0f24 55%, #070b1a 100%), linear-gradient(160deg, var(--bg1), var(--bg2));
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:22px;
+  }
+  .wrap{max-width:1100px; width:100%;}
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 8px 40px rgba(0,0,0,.45), inset 0 0 40px rgba(139,92,246,.05);
+    border-radius:20px; padding:24px; backdrop-filter: blur(6px);
+  }
+  h1{margin:0 0 6px; font-weight:800; letter-spacing:.5px;}
+  .pill{display:inline-flex; gap:6px; align-items:center; padding:6px 10px; border-radius:999px;
+    font-size:.8rem; color:#0b1220; background:linear-gradient(90deg,var(--accent),var(--accent2)); font-weight:700;}
+  .grid{display:grid; gap:16px;}
+  @media(min-width:960px){ .grid{grid-template-columns: 1.1fr .9fr;} }
+  .section{
+    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06);
+    border-radius:16px; padding:18px;
+  }
+  h2{margin:0 0 10px; font-size:1.1rem; color:#c7d2fe}
+  p{color:var(--muted); line-height:1.45}
+  .controls{display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 6px}
+  button{
+    appearance:none; border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer;
+    background:linear-gradient(90deg, #4f46e5, #22d3ee); color:#0b1220; box-shadow:0 8px 18px rgba(79,70,229,.35);
+    transition:.15s transform ease;
+  }
+  button:hover{ transform:translateY(-1px) scale(1.01) }
+  button.secondary{ background:linear-gradient(90deg, #334155, #64748b); color:#e5e7eb; box-shadow:none }
+  button.warn{ background:linear-gradient(90deg, #f59e0b, #f97316); color:#0b1220}
+  button.danger{ background:linear-gradient(90deg, #ef4444, #f43f5e); color:#0b1220}
+  .muted{color:var(--muted); font-size:.9rem}
+  .flex{display:flex; gap:10px; flex-wrap:wrap}
+  select, .fakeinput{
+    width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04); outline:none;
+  }
+  .cols{display:grid; gap:10px}
+  @media(min-width:720px){ .cols{grid-template-columns: repeat(3,1fr);} }
+  .badge{display:inline-block; padding:4px 10px; border-radius:999px; background:rgba(139,92,246,.2); color:#c7b3ff; font-size:.8rem; border:1px solid rgba(139,92,246,.35)}
+  .log{max-height:180px; overflow:auto; padding-right:6px}
+  .log p{margin:.35rem 0}
+  .divider{height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent); margin:12px 0}
+  .ending{background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.25); padding:14px; border-radius:12px}
+  .wrong{background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.25); padding:14px; border-radius:12px}
+  .hint{background:rgba(59,130,246,.08); border:1px solid rgba(59,130,246,.25); padding:10px; border-radius:10px; margin:8px 0}
+  .small{font-size:.86rem}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="flex" style="align-items:center; justify-content:space-between;">
+        <h1>Clue — Pretty Little Liars (Piloto)</h1>
+        <span class="pill">Caso aleatorio</span>
+      </div>
+      <p class="muted">
+        Noche de tormenta en el granero de Spencer. Bebieron, se durmieron… y <b>Alison desapareció</b>.
+        Un año después, aparece un cuerpo y todo se complica. Todas guardan secretos. ¿Quién la atacó, con qué, y dónde?
+      </p>
+
+      <div class="grid">
+        <!-- IZQUIERDA: historia y pistas -->
+        <section class="section">
+          <h2>Historia de contexto</h2>
+          <div id="historia" class="small"></div>
+          <div class="divider"></div>
+          <div class="flex">
+            <button id="btnPista" class="secondary">🔎 Generar pista</button>
+            <button id="btnReiniciar" class="warn">🔄 Nuevo caso</button>
+          </div>
+          <div id="pistas"></div>
+          <div class="divider"></div>
+          <h2>Bitácora</h2>
+          <div id="log" class="log small"></div>
+        </section>
+
+        <!-- DERECHA: panel de juego -->
+        <section class="section">
+          <h2>Acusación</h2>
+          <p class="muted small">Elige <b>culpable</b>, <b>arma</b> y <b>locación</b>. Tienes pistas limitadas.</p>
+          <div class="cols">
+            <div>
+              <span class="badge">Sospechosa</span>
+              <select id="selCulpable"></select>
+            </div>
+            <div>
+              <span class="badge">Arma</span>
+              <select id="selArma"></select>
+            </div>
+            <div>
+              <span class="badge">Locación</span>
+              <select id="selLugar"></select>
+            </div>
+          </div>
+          <div class="controls" style="margin-top:12px">
+            <button id="btnAcusar">⚠️ Hacer acusación</button>
+            <button id="btnRevelar" class="danger">🧾 Revelar historia final</button>
+          </div>
+          <div id="resultado" style="margin-top:12px"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* =========================
+   Datos base del dominio
+========================= */
+const sospechosas = [
+  { id:'spencer', nombre:'Spencer Hastings', profesion:'Estudiante aplicada',
+    perfil:'Alison la chantajeaba por besar al novio de su hermana. Perfeccionista, competitiva.' },
+  { id:'emily',   nombre:'Emily Fields', profesion:'Nadadora',
+    perfil:'Confundida por sus sentimientos hacia Alison; “A” y Alison explotaban su secreto.' },
+  { id:'aria',    nombre:'Aria Montgomery', profesion:'Estudiante / creativa',
+    perfil:'Sabe que su padre engañó a su madre; Alison la presionaba para contarlo.' },
+  { id:'hanna',   nombre:'Hanna Marin', profesion:'Estudiante / fashion',
+    perfil:'Antes tuvo sobrepeso; Alison la humillaba y detonó desórdenes alimenticios.' },
+  { id:'mona',    nombre:'Mona Vanderwaal', profesion:'Estudiante / tech',
+    perfil:'Ex-buleada por Alison; rencor latente. Tras la desaparición, se volvió popular.' },
+];
+
+const armas = [
+  { id:'pala', nombre:'Pala' },
+  { id:'piedra', nombre:'Piedra' },
+  { id:'petardos', nombre:'Petardos' },
+  { id:'bate', nombre:'Bate de béisbol' },
+  { id:'somniferos', nombre:'Somníferos' },
+];
+
+const lugares = [
+  { id:'granero', nombre:'Granero de Spencer' },
+  { id:'patio', nombre:'Patio de los DiLaurentis' },
+  { id:'escuela', nombre:'Pasillo de Rosewood High' },
+  { id:'parque', nombre:'Parque de Rosewood' },
+  { id:'casaMona', nombre:'Casa de Mona' },
+];
+
+/* =========================
+   Estado del juego
+========================= */
+let casoSecreto = null;     // {culpable, arma, lugar}
+let pistasRestantes = 3;
+const logDiv = document.getElementById('log');
+const pistasDiv = document.getElementById('pistas');
+const historiaDiv = document.getElementById('historia');
+const resDiv = document.getElementById('resultado');
+
+function log(msg){ logDiv.innerHTML = `<p>• ${msg}</p>` + logDiv.innerHTML; }
+
+/* =========================
+   Utilidades
+========================= */
+function aleatorio(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function porId(arr, id){ return arr.find(x=>x.id===id); }
+
+/* =========================
+   Narrativa base
+========================= */
+function narrativaInicial(){
+  return `
+  <p>Era una noche de lluvia en el <b>granero de Spencer</b>. Alison llegó tarde con algo de alcohol, 
+  rieron y, al poco rato, se durmieron. Un grito cortó la madrugada. 
+  Al despertar, <b>Alison ya no estaba</b>.</p>
+  <p>Meses después, apareció un cuerpo y todo apuntaba a un ataque. 
+  Las amigas tenían secretos que <b>Alison conocía y usaba</b> para manipularlas. 
+  <b>“A”</b> también parecía saberlo todo.</p>
+  <p>Tu misión: deducir <b>quién</b> la atacó, <b>con qué</b> y <b>dónde</b>. Usa tus pistas con cuidado.</p>
+  `;
+}
+
+/* =========================
+   Circuito de pistas (coherentes con el caso)
+========================= */
+function generarPista(){
+  if (pistasRestantes <= 0) {
+    log('No quedan más pistas.');
+    return;
+  }
+  pistasRestantes--;
+
+  // pistas basadas en el caso real
+  const { culpable, arma, lugar } = casoSecreto;
+
+  const banco = [];
+
+  // Pistas sobre culpable
+  if (culpable==='spencer'){
+    banco.push('Se percibe <b>perfume caro</b> y restos de barro… como de alguien que corre en jardines bien cuidados.');
+    banco.push('Una huella de zapato parece <b>talla pequeña pero firme</b>.');
+  }
+  if (culpable==='emily'){
+    banco.push('Se encontró <b>cloro de alberca</b> impregnado en una prenda.');
+    banco.push('Una nota arrugada dice: “No sé cómo decirlo… —E”.');
+  }
+  if (culpable==='aria'){
+    banco.push('Alguien llevaba <b>papel de diario con tinta fresca</b>, tal vez escribiendo algo importante.');
+    banco.push('Se oyó discutir sobre <b>mantener un secreto familiar</b>.');
+  }
+  if (culpable==='hanna'){
+    banco.push('Un envoltorio de <b>caramelo dietético</b> tirado cerca.');
+    banco.push('Se vieron <b>huellas de tacones</b> que iban y venían con nerviosismo.');
+  }
+  if (culpable==='mona'){
+    banco.push('Un pendiente con inicial <b>M</b> fue hallado cerca —o una pieza tecnológica alterada.');
+    banco.push('Alguien conocía <b>cada movimiento del grupo</b>, como si lo monitoreara.');
+  }
+
+  // Pistas sobre arma
+  if (arma==='pala'){
+    banco.push('Hay <b>tierra removida</b> y marcas rectas en el suelo.');
+  }
+  if (arma==='piedra'){
+    banco.push('Se halló <b>polvo de piedra</b> en la ropa.');
+  }
+  if (arma==='petardos'){
+    banco.push('Olor a <b>pólvora</b> en el aire, como de un mal recuerdo.');
+  }
+  if (arma==='bate'){
+    banco.push('Una <b>marca curva</b> en una cerca de madera cercana.');
+  }
+  if (arma==='somniferos'){
+    banco.push('Un sobrecito con <b>pastillas trituradas</b> y un vaso desechable.');
+  }
+
+  // Pistas sobre lugar
+  if (lugar==='granero'){
+    banco.push('Se escuchó un golpe <b>dentro del granero</b> en plena noche.');
+  }
+  if (lugar==='patio'){
+    banco.push('Una luz parpadeante en el <b>patio de los DiLaurentis</b> esa noche.');
+  }
+  if (lugar==='escuela'){
+    banco.push('Cámara de seguridad con una sombra en el <b>pasillo de la escuela</b>.');
+  }
+  if (lugar==='parque'){
+    banco.push('Suelo húmedo y <b>hojas trituradas</b> en el parque.');
+  }
+  if (lugar==='casaMona'){
+    banco.push('Se oyó música a bajo volumen en la <b>casa de Mona</b> esa madrugada.');
+  }
+
+  const pista = aleatorio(banco);
+  const nodo = document.createElement('div');
+  nodo.className='hint small';
+  nodo.innerHTML = `🔎 ${pista} <span class="muted">(${pistasRestantes} pistas restantes)</span>`;
+  pistasDiv.prepend(nodo);
+  log('Nueva pista generada.');
+}
+
+/* =========================
+   Finales (uno por culpable)
+========================= */
+function finalPorCulpable(idCulpable, armaId, lugarId){
+  const armaN = porId(armas, armaId).nombre.toLowerCase();
+  const lugarN = porId(lugares, lugarId).nombre;
+
+  const textos = {
+    spencer: `
+      <b>Final: Spencer</b>. El peso del perfeccionismo y el miedo a perder el control la arrinconaron.
+      Aquella noche, una discusión subió de tono. En un impulso, Spencer utilizó <b>${armaN}</b>
+      cerca de <b>${lugarN}</b>. No pretendía llegar tan lejos, pero el secreto la devoró.
+      Entre lealtad y orgullo, eligió callar. "A" siempre lo supo.
+    `,
+    emily: `
+      <b>Final: Emily</b>. La confusión que Alison alimentó con juegos de afecto pasó la raya.
+      El dolor se volvió ira desbordada. Con <b>${armaN}</b> y en <b>${lugarN}</b>, Emily hizo lo impensable.
+      Las lágrimas no borran lo que fue: “A” convirtió su secreto en cadenas.
+    `,
+    aria: `
+      <b>Final: Aria</b>. Guardó el secreto de su padre mientras Alison la empujaba al borde.
+      Aquella noche discutieron; Aria temió perder a su familia y actuó por impulso.
+      <b>${lugarN}</b>, <b>${armaN}</b>, y un silencio que la persigue en cada página que escribe.
+    `,
+    hanna: `
+      <b>Final: Hanna</b>. Años de humillación pasaron factura. Entre rabia y vergüenza,
+      Hanna explotó. En <b>${lugarN}</b>, con <b>${armaN}</b>, descargó un dolor antiguo.
+      La culpa no adelgaza recuerdos. “A” se encargó de que nunca lo olvidara.
+    `,
+    mona: `
+      <b>Final: Mona</b>. La primera "A". Planificó, vigiló, manipuló.
+      Aquella noche, en <b>${lugarN}</b>, <b>${armaN}</b> no fue un accidente: fue un mensaje.
+      Mona no solo quería desaparecer a Alison: quería reescribir el tablero.
+    `
+  };
+  return textos[idCulpable] || '<b>Final no disponible.</b>';
+}
+
+/* =========================
+   UI inicial
+========================= */
+const selC = document.getElementById('selCulpable');
+const selA = document.getElementById('selArma');
+const selL = document.getElementById('selLugar');
+
+function poblarSelects(){
+  selC.innerHTML = sospechosas.map(s=>`<option value="${s.id}">${s.nombre}</option>`).join('');
+  selA.innerHTML = armas.map(a=>`<option value="${a.id}">${a.nombre}</option>`).join('');
+  selL.innerHTML = lugares.map(l=>`<option value="${l.id}">${l.nombre}</option>`).join('');
+}
+
+/* =========================
+   Nuevo caso (random)
+========================= */
+function nuevoCaso(){
+  const culp = aleatorio(sospechosas).id;
+  const arm = aleatorio(armas).id;
+  const lug = aleatorio(lugares).id;
+  casoSecreto = { culpable: culp, arma: arm, lugar: lug };
+  pistasRestantes = 3;
+  pistasDiv.innerHTML = '';
+  resDiv.innerHTML = '';
+  logDiv.innerHTML = '';
+  historiaDiv.innerHTML = narrativaInicial();
+  log('Nuevo caso creado aleatoriamente.');
+}
+
+/* =========================
+   Verificación de acusación
+========================= */
+function acusar(){
+  const pick = {
+    culpable: selC.value,
+    arma: selA.value,
+    lugar: selL.value
+  };
+
+  const correcto = (pick.culpable===casoSecreto.culpable) &&
+                   (pick.arma===casoSecreto.arma) &&
+                   (pick.lugar===casoSecreto.lugar);
+
+  if(correcto){
+    const html = `
+      <div class="ending">
+        <p>✅ <b>¡Acusación correcta!</b></p>
+        <p>${finalPorCulpable(pick.culpable, pick.arma, pick.lugar)}</p>
+      </div>`;
+    resDiv.innerHTML = html;
+    log('La acusación fue correcta.');
+  }else{
+    // dar feedback parcial
+    let tips = [];
+    tips.push(pick.culpable===casoSecreto.culpable ? '✔️ Culpable acertado' : '❌ Culpable incorrecto');
+    tips.push(pick.arma===casoSecreto.arma ? '✔️ Arma acertada' : '❌ Arma incorrecta');
+    tips.push(pick.lugar===casoSecreto.lugar ? '✔️ Lugar acertado' : '❌ Lugar incorrecto');
+
+    resDiv.innerHTML = `
+      <div class="wrong">
+        <p>❌ <b>Acusación incorrecta.</b> Pistas parciales:</p>
+        <ul class="small" style="margin:.25rem 0 .5rem 1rem">
+          ${tips.map(t=>`<li>${t}</li>`).join('')}
+        </ul>
+        <p class="muted small">Puedes generar más pistas (si te quedan) o intentar otra acusación.</p>
+      </div>`;
+    log('Acusación fallida.');
+  }
+}
+
+/* =========================
+   Revelar historia final
+========================= */
+function revelar(){
+  const { culpable, arma, lugar } = casoSecreto;
+  const html = `
+    <div class="ending">
+      <p>🧾 <b>Historia final revelada</b></p>
+      <p><span class="badge">Culpable</span> ${porId(sospechosas, culpable).nombre}</p>
+      <p><span class="badge">Arma</span> ${porId(armas, arma).nombre}</p>
+      <p><span class="badge">Lugar</span> ${porId(lugares, lugar).nombre}</p>
+      <div class="divider"></div>
+      <p>${finalPorCulpable(culpable, arma, lugar)}</p>
+    </div>`;
+  resDiv.innerHTML = html;
+  log('Historia final revelada.');
+}
+
+/* =========================
+   Arranque
+========================= */
+poblarSelects();
+nuevoCaso();
+
+// Botones
+document.getElementById('btnPista').addEventListener('click', generarPista);
+document.getElementById('btnReiniciar').addEventListener('click', nuevoCaso);
+document.getElementById('btnAcusar').addEventListener('click', acusar);
+document.getElementById('btnRevelar').addEventListener('click', revelar);
+</script>
+</body>
+</html>
