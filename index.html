@@ -2,450 +2,403 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Clue — Pretty Little Liars (mini)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clue — Pretty Little Liars (Piloto)</title>
 <style>
   :root{
-    --bg: #0b1020;
-    --panel: #131a33;
-    --soft: #202a52;
-    --accent: #9b87f5;
-    --ok: #10b981;
-    --bad: #ef4444;
-    --muted:#94a3b8;
+    --bg1:#0b1220; --bg2:#111a2e; --card:#0f172a; --accent:#8b5cf6; --accent2:#22d3ee;
+    --text:#e5e7eb; --muted:#94a3b8; --good:#22c55e; --bad:#ef4444; --warn:#f59e0b;
   }
-  html,body{height:100%}
+  *{box-sizing:border-box}
   body{
-    margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    background: radial-gradient(1200px 600px at 20% -10%, #1a2046, transparent 60%),
-                radial-gradient(1200px 700px at 120% 110%, #0f1430, transparent 50%),
-                var(--bg);
-    color:#e5e7eb; display:flex; align-items:flex-start; justify-content:center;
-    padding:24px;
+    margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--text); background:radial-gradient(1200px 600px at 20% -10%, #1f2357 0%, #0b0f24 55%, #070b1a 100%), linear-gradient(160deg, var(--bg1), var(--bg2));
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:22px;
   }
-  .wrap{
-    width:min(1100px, 95vw); background:linear-gradient(180deg, #111633, #0c122b);
-    border:1px solid #1f2a59; border-radius:18px; padding:24px; box-shadow: 0 25px 60px rgba(0,0,0,.45);
-  }
-  header{
-    display:flex; align-items:center; gap:16px; margin-bottom:10px;
-  }
-  header .title{
-    font-size:clamp(20px, 2.6vw, 28px); font-weight:800; letter-spacing:.5px;
-  }
-  header .subtitle{ color:var(--muted); font-size:14px }
-  .grid{
-    display:grid; grid-template-columns: 1.2fr .8fr; gap:18px; margin-top:10px;
-  }
-  .panel{
-    background:linear-gradient(180deg, #12183a, #0e1533);
-    border:1px solid #202a52; border-radius:14px; padding:16px;
-  }
-  .panel h2{ margin:0 0 10px; font-size:16px; letter-spacing:.3px; color:#c7d2fe }
-  .story{
-    background:#0c1230; border:1px dashed #243073; border-radius:12px; padding:14px; line-height:1.45;
-  }
-  .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-  .btn{
-    appearance:none; border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer;
-    background:linear-gradient(180deg,#3843a8,#283089); color:#fff; border:1px solid #4a57cd;
-    transition:transform .08s ease, box-shadow .12s ease, opacity .15s ease;
-  }
-  .btn:hover{ transform: translateY(-1px); box-shadow: 0 6px 18px rgba(60,80,200,.35) }
-  .btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; box-shadow:none }
-  .btn.alt{ background:linear-gradient(180deg,#2a364f,#1d2639); border-color:#334155 }
-  .btn.good{ background:linear-gradient(180deg,#13c29a,#0e9e7e); border-color:#34d399 }
-  .btn.bad{ background:linear-gradient(180deg,#f06565,#dc3e3e); border-color:#f87171 }
-  .pick-grid{
-    display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-top:8px;
-  }
+  .wrap{max-width:1100px; width:100%;}
   .card{
-    background:#0e1533; border:1px solid #27306a; border-radius:12px; padding:10px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 8px 40px rgba(0,0,0,.45), inset 0 0 40px rgba(139,92,246,.05);
+    border-radius:20px; padding:24px; backdrop-filter: blur(6px);
   }
-  .card h3{ margin:0 0 6px; font-size:14px; color:#cbd5e1 }
-  .opt{
-    display:flex; align-items:center; gap:8px; margin:6px 0; padding:8px 10px;
-    background:#0c1230; border:1px solid #1c2554; border-radius:10px; cursor:pointer; transition: border-color .12s;
+  h1{margin:0 0 6px; font-weight:800; letter-spacing:.5px;}
+  .pill{display:inline-flex; gap:6px; align-items:center; padding:6px 10px; border-radius:999px;
+    font-size:.8rem; color:#0b1220; background:linear-gradient(90deg,var(--accent),var(--accent2)); font-weight:700;}
+  .grid{display:grid; gap:16px;}
+  @media(min-width:960px){ .grid{grid-template-columns: 1.1fr .9fr;} }
+  .section{
+    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06);
+    border-radius:16px; padding:18px;
   }
-  .opt:hover{ border-color:#3f4fb8 }
-  .opt input{ margin:0 }
-  .muted{ color:var(--muted) }
-  .hints{ display:flex; flex-direction:column-reverse; gap:10px; margin-top:6px; }
-  .hint{
-    padding:10px 12px; border-radius:10px; border:1px solid #293478; background:#0d1435; line-height:1.4;
+  h2{margin:0 0 10px; font-size:1.1rem; color:#c7d2fe}
+  p{color:var(--muted); line-height:1.45}
+  .controls{display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 6px}
+  button{
+    appearance:none; border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer;
+    background:linear-gradient(90deg, #4f46e5, #22d3ee); color:#0b1220; box-shadow:0 8px 18px rgba(79,70,229,.35);
+    transition:.15s transform ease;
   }
-  .small{ font-size:.95rem }
-  .result{
-    padding:12px; border-radius:12px; border:1px solid #2a375e; background:#0a112b; margin-top:10px;
+  button:hover{ transform:translateY(-1px) scale(1.01) }
+  button.secondary{ background:linear-gradient(90deg, #334155, #64748b); color:#e5e7eb; box-shadow:none }
+  button.warn{ background:linear-gradient(90deg, #f59e0b, #f97316); color:#0b1220}
+  button.danger{ background:linear-gradient(90deg, #ef4444, #f43f5e); color:#0b1220}
+  .muted{color:var(--muted); font-size:.9rem}
+  .flex{display:flex; gap:10px; flex-wrap:wrap}
+  select, .fakeinput{
+    width:100%; background:#0b1220; color:var(--text); border:1px solid #1f2937; border-radius:10px; padding:10px 12px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04); outline:none;
   }
-  .log{ margin-top:8px; font-size:.9rem; color:#9aa6d1 }
-  footer{ margin-top:16px; font-size:.85rem; color:#8b95bd; text-align:center }
-  /* Pills */
-  .pill{ display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; font-size:.8rem;
-    background:#0f1636; border:1px solid #2a3576; color:#c7cffc }
+  .cols{display:grid; gap:10px}
+  @media(min-width:720px){ .cols{grid-template-columns: repeat(3,1fr);} }
+  .badge{display:inline-block; padding:4px 10px; border-radius:999px; background:rgba(139,92,246,.2); color:#c7b3ff; font-size:.8rem; border:1px solid rgba(139,92,246,.35)}
+  .log{max-height:180px; overflow:auto; padding-right:6px}
+  .log p{margin:.35rem 0}
+  .divider{height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent); margin:12px 0}
+  .ending{background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.25); padding:14px; border-radius:12px}
+  .wrong{background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.25); padding:14px; border-radius:12px}
+  .hint{background:rgba(59,130,246,.08); border:1px solid rgba(59,130,246,.25); padding:10px; border-radius:10px; margin:8px 0}
+  .small{font-size:.86rem}
 </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <div class="title">Clue — Pretty Little Liars (cap. piloto)</div>
-      <div class="subtitle">5 sospechosas · 5 armas · 5 locaciones · 5 finales</div>
-    </header>
+    <div class="card">
+      <div class="flex" style="align-items:center; justify-content:space-between;">
+        <h1>Clue — Pretty Little Liars (Piloto)</h1>
+        <span class="pill">Caso aleatorio</span>
+      </div>
+      <p class="muted">
+        Noche de tormenta en el granero de Spencer. Bebieron, se durmieron… y <b>Alison desapareció</b>.
+        Un año después, aparece un cuerpo y todo se complica. Todas guardan secretos. ¿Quién la atacó, con qué, y dónde?
+      </p>
 
-    <div class="grid">
-      <!-- IZQUIERDA: narrativa + pistas + resultado -->
-      <section class="panel">
-        <h2>Historia</h2>
-        <div id="historia" class="story"></div>
-
-        <div class="row" style="margin-top:10px">
-          <button id="btnPista" class="btn">🔎 Nueva pista</button>
-          <button id="btnRevelar" class="btn alt">👁️ Revelar solución</button>
-          <button id="btnNuevo" class="btn">🌀 Nuevo caso</button>
-        </div>
-
-        <h2 style="margin-top:14px;">Pistas</h2>
-        <div id="pistas" class="hints"></div>
-
-        <h2 style="margin-top:14px;">Resultado</h2>
-        <div id="resultado" class="result muted">Aún no has verificado tu hipótesis.</div>
-
-        <div id="log" class="log"></div>
-      </section>
-
-      <!-- DERECHA: selección -->
-      <aside class="panel">
-        <h2>Tu hipótesis</h2>
-        <div class="pick-grid">
-          <div class="card">
-            <h3>Sospechosa</h3>
-            <div id="opcSospechosas"></div>
+      <div class="grid">
+        <!-- IZQUIERDA: historia y pistas -->
+        <section class="section">
+          <h2>Historia de contexto</h2>
+          <div id="historia" class="small"></div>
+          <div class="divider"></div>
+          <div class="flex">
+            <button id="btnPista" class="secondary">🔎 Generar pista</button>
+            <button id="btnReiniciar" class="warn">🔄 Nuevo caso</button>
           </div>
-          <div class="card">
-            <h3>Arma</h3>
-            <div id="opcArmas"></div>
+          <div id="pistas"></div>
+          <div class="divider"></div>
+          <h2>Bitácora</h2>
+          <div id="log" class="log small"></div>
+        </section>
+
+        <!-- DERECHA: panel de juego -->
+        <section class="section">
+          <h2>Acusación</h2>
+          <p class="muted small">Elige <b>culpable</b>, <b>arma</b> y <b>locación</b>. Tienes pistas limitadas.</p>
+          <div class="cols">
+            <div>
+              <span class="badge">Sospechosa</span>
+              <select id="selCulpable"></select>
+            </div>
+            <div>
+              <span class="badge">Arma</span>
+              <select id="selArma"></select>
+            </div>
+            <div>
+              <span class="badge">Locación</span>
+              <select id="selLugar"></select>
+            </div>
           </div>
-          <div class="card">
-            <h3>Locación</h3>
-            <div id="opcLugares"></div>
+          <div class="controls" style="margin-top:12px">
+            <button id="btnAcusar">⚠️ Hacer acusación</button>
+            <button id="btnRevelar" class="danger">🧾 Revelar historia final</button>
           </div>
-        </div>
-        <div class="row" style="margin-top:12px">
-          <button id="btnVerificar" class="btn good">✅ Verificar</button>
-          <button id="btnLimpiar" class="btn bad">♻️ Limpiar selección</button>
-        </div>
-        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-          <span class="pill" id="pillEstado">Caso sin resolver</span>
-          <span class="pill" id="pillIntentos">Intentos: 0/4</span>
-        </div>
-      </aside>
+          <div id="resultado" style="margin-top:12px"></div>
+        </section>
+      </div>
     </div>
-
-    <footer>© 2025 · Proyecto de Sistemas Expertos — Mini Clue · Basado en PLL (uso académico)</footer>
   </div>
 
 <script>
 /* =========================
-   Datos del juego
-   ========================= */
+   Datos base del dominio
+========================= */
 const sospechosas = [
-  { id:'spencer',  nombre:'Spencer Hastings', detalle:'Ambiciosa, perfeccionista' },
-  { id:'emily',    nombre:'Emily Fields',     detalle:'Nadadora, sensible' },
-  { id:'aria',     nombre:'Aria Montgomery',  detalle:'Creativa, leal' },
-  { id:'hanna',    nombre:'Hanna Marin',      detalle:'Popular, vulnerable' },
-  { id:'mona',     nombre:'Mona Vanderwaal',  detalle:'Inteligente, rencorosa' },
+  { id:'spencer', nombre:'Spencer Hastings', profesion:'Estudiante aplicada',
+    perfil:'Alison la chantajeaba por besar al novio de su hermana. Perfeccionista, competitiva.' },
+  { id:'emily',   nombre:'Emily Fields', profesion:'Nadadora',
+    perfil:'Confundida por sus sentimientos hacia Alison; “A” y Alison explotaban su secreto.' },
+  { id:'aria',    nombre:'Aria Montgomery', profesion:'Estudiante / creativa',
+    perfil:'Sabe que su padre engañó a su madre; Alison la presionaba para contarlo.' },
+  { id:'hanna',   nombre:'Hanna Marin', profesion:'Estudiante / fashion',
+    perfil:'Antes tuvo sobrepeso; Alison la humillaba y detonó desórdenes alimenticios.' },
+  { id:'mona',    nombre:'Mona Vanderwaal', profesion:'Estudiante / tech',
+    perfil:'Ex-buleada por Alison; rencor latente. Tras la desaparición, se volvió popular.' },
 ];
+
 const armas = [
-  { id:'pala',       nombre:'Pala de jardín' },
-  { id:'piedra',     nombre:'Piedra pesada' },
-  { id:'petardos',   nombre:'Petardos/cuetes' },
-  { id:'bate',       nombre:'Bate de béisbol' },
+  { id:'pala', nombre:'Pala' },
+  { id:'piedra', nombre:'Piedra' },
+  { id:'petardos', nombre:'Petardos' },
+  { id:'bate', nombre:'Bate de béisbol' },
   { id:'somniferos', nombre:'Somníferos' },
 ];
+
 const lugares = [
-  { id:'granero',  nombre:'Granero de los Hastings' },
-  { id:'patio',    nombre:'Patio de los DiLaurentis' },
-  { id:'escuela',  nombre:'Pasillo de la escuela' },
-  { id:'parque',   nombre:'Parque de Rosewood' },
+  { id:'granero', nombre:'Granero de Spencer' },
+  { id:'patio', nombre:'Patio de los DiLaurentis' },
+  { id:'escuela', nombre:'Pasillo de Rosewood High' },
+  { id:'parque', nombre:'Parque de Rosewood' },
   { id:'casaMona', nombre:'Casa de Mona' },
 ];
 
 /* =========================
-   Estado del caso
-   ========================= */
-let casoSecreto = null;
-let poolPistas = [];     // pistas únicas preconstruidas por caso
-let pistasRestantes = 0;
-const INTENTOS_MAX = 4;
-let intentosUsados = 0;
+   Estado del juego
+========================= */
+let casoSecreto = null;     // {culpable, arma, lugar}
+let pistasRestantes = 3;
+const logDiv = document.getElementById('log');
+const pistasDiv = document.getElementById('pistas');
+const historiaDiv = document.getElementById('historia');
+const resDiv = document.getElementById('resultado');
 
-const el = {
-  historia:  document.getElementById('historia'),
-  pistas:    document.getElementById('pistas'),
-  res:       document.getElementById('resultado'),
-  log:       document.getElementById('log'),
-  pill:      document.getElementById('pillEstado'),
-  pillTry:   document.getElementById('pillIntentos'),
-  sOps:      document.getElementById('opcSospechosas'),
-  aOps:      document.getElementById('opcArmas'),
-  lOps:      document.getElementById('opcLugares'),
-  btnPista:  document.getElementById('btnPista'),
-  btnRevelar:document.getElementById('btnRevelar'),
-  btnNuevo:  document.getElementById('btnNuevo'),
-  btnVer:    document.getElementById('btnVerificar'),
-  btnClr:    document.getElementById('btnLimpiar'),
-};
-
-function log(m){ el.log.innerHTML = `<div>• ${m}</div>` + el.log.innerHTML; }
-const aleatorio = arr => arr[Math.floor(Math.random()*arr.length)];
+function log(msg){ logDiv.innerHTML = `<p>• ${msg}</p>` + logDiv.innerHTML; }
 
 /* =========================
-   Narrativa inicial
-   ========================= */
+   Utilidades
+========================= */
+function aleatorio(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function porId(arr, id){ return arr.find(x=>x.id===id); }
+
+/* =========================
+   Narrativa base
+========================= */
 function narrativaInicial(){
   return `
-  <b>Rosewood, noche de tormenta.</b> Las cinco amigas se reúnen en el granero de Spencer para una pijamada.
-  Alison llega última, trae alcohol; la luz parpadea y, tras dormitar, al despertar <b>Alison ya no está</b>.
-  Spencer asegura haber salido a buscarla y haber oído un grito. El caso se “enfría”, hasta que un año después
-  aparece un cuerpo y pistas que sugieren que no fue un accidente. Todas guardan secretos que Alison conocía:
-  <ul style="margin:.4rem 0 .2rem 1.2rem">
-    <li><b>Spencer</b>: la vio besando al novio de su hermana.</li>
-    <li><b>Emily</b>: su sexualidad, y el juego de coqueteo/confusión de Alison.</li>
-    <li><b>Aria</b>: sabía de la infidelidad del padre de Aria.</li>
-    <li><b>Hanna</b>: los apodos y presión que la llevaron a desórdenes alimenticios.</li>
-    <li><b>Todo el grupo</b>: el “accidente” que dejó ciega a Jenna.</li>
-  </ul>
-  Y alguien más sabe todo: <b>"A"</b>. ¿Quién fue? ¿Con qué arma? ¿Dónde? <i>Resuelve el caso.</i>
+  <p>Era una noche de lluvia en el <b>granero de Spencer</b>. Alison llegó tarde con algo de alcohol, 
+  rieron y, al poco rato, se durmieron. Un grito cortó la madrugada. 
+  Al despertar, <b>Alison ya no estaba</b>.</p>
+  <p>Meses después, apareció un cuerpo y todo apuntaba a un ataque. 
+  Las amigas tenían secretos que <b>Alison conocía y usaba</b> para manipularlas. 
+  <b>“A”</b> también parecía saberlo todo.</p>
+  <p>Tu misión: deducir <b>quién</b> la atacó, <b>con qué</b> y <b>dónde</b>. Usa tus pistas con cuidado.</p>
   `;
 }
 
 /* =========================
-   UI de opciones
-   ========================= */
-function pintarOpciones(){
-  const mk = (name, list) => list.map(o => `
-    <label class="opt">
-      <input type="radio" name="${name}" value="${o.id}" />
-      <span><b>${o.nombre}</b><br><span class="muted">${o.detalle || ''}</span></span>
-    </label>
-  `).join('');
+   Circuito de pistas (coherentes con el caso)
+========================= */
+function generarPista(){
+  if (pistasRestantes <= 0) {
+    log('No quedan más pistas.');
+    return;
+  }
+  pistasRestantes--;
 
-  el.sOps.innerHTML = mk('sus', sospechosas);
-  el.aOps.innerHTML = mk('arm', armas);
-  el.lOps.innerHTML = mk('lug', lugares);
-}
+  // pistas basadas en el caso real
+  const { culpable, arma, lugar } = casoSecreto;
 
-function getSeleccion(){
-  const v = n => (document.querySelector(`input[name="${n}"]:checked`)||{}).value || null;
-  return { sus:v('sus'), arm:v('arm'), lug:v('lug') };
-}
+  const banco = [];
 
-function limpiarSeleccion(){
-  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked=false);
-  el.res.classList.remove('ok','bad');
-  el.res.innerHTML = 'Selección limpiada. Vuelve a intentarlo.';
-}
-
-/* =========================
-   Pistas únicas por caso
-   ========================= */
-function construirPistas(caso){
-  const { culpable, arma, lugar } = caso;
-  const banco = new Set();
-
-  // culpable
+  // Pistas sobre culpable
   if (culpable==='spencer'){
-    banco.add('Se percibe <b>perfume caro</b> y barro fino de jardines cuidados.');
-    banco.add('Huella pequeña pero firme junto a una cerca del granero.');
+    banco.push('Se percibe <b>perfume caro</b> y restos de barro… como de alguien que corre en jardines bien cuidados.');
+    banco.push('Una huella de zapato parece <b>talla pequeña pero firme</b>.');
   }
   if (culpable==='emily'){
-    banco.add('Rastro de <b>cloro de alberca</b> en una sudadera.');
-    banco.add('Una nota arrugada dice: “No sé cómo decirlo… —E”.');
+    banco.push('Se encontró <b>cloro de alberca</b> impregnado en una prenda.');
+    banco.push('Una nota arrugada dice: “No sé cómo decirlo… —E”.');
   }
   if (culpable==='aria'){
-    banco.add('Papel de diario con <b>tinta fresca</b> en el bolsillo de alguien.');
-    banco.add('Discusión sobre <b>un secreto familiar</b> escuchada cerca.');
+    banco.push('Alguien llevaba <b>papel de diario con tinta fresca</b>, tal vez escribiendo algo importante.');
+    banco.push('Se oyó discutir sobre <b>mantener un secreto familiar</b>.');
   }
   if (culpable==='hanna'){
-    banco.add('Envoltorio de <b>caramelo dietético</b> cerca del lugar.');
-    banco.add('Huellas de <b>tacones</b> que van y vienen con nerviosismo.');
+    banco.push('Un envoltorio de <b>caramelo dietético</b> tirado cerca.');
+    banco.push('Se vieron <b>huellas de tacones</b> que iban y venían con nerviosismo.');
   }
   if (culpable==='mona'){
-    banco.add('Un pendiente con inicial <b>M</b> y una pieza electrónica alterada.');
-    banco.add('Alguien parecía <b>vigilar cada movimiento</b> del grupo.');
+    banco.push('Un pendiente con inicial <b>M</b> fue hallado cerca —o una pieza tecnológica alterada.');
+    banco.push('Alguien conocía <b>cada movimiento del grupo</b>, como si lo monitoreara.');
   }
 
-  // arma
-  if (arma==='pala')       banco.add('Tierra removida y marcas rectas, como de una <b>pala</b>.');
-  if (arma==='piedra')     banco.add('Polvo de <b>piedra</b> en una manga.');
-  if (arma==='petardos')   banco.add('Ligero olor a <b>pólvora</b> invade la zona.');
-  if (arma==='bate')       banco.add('Una marca curva en madera que sugiere un <b>bate</b>.');
-  if (arma==='somniferos') banco.add('Sobrecito con <b>pastillas trituradas</b> y un vaso desechable.');
-
-  // lugar
-  if (lugar==='granero')   banco.add('Golpe sordo dentro del <b>granero</b> en plena noche.');
-  if (lugar==='patio')     banco.add('Luz parpadeante en el <b>patio de los DiLaurentis</b>.');
-  if (lugar==='escuela')   banco.add('Sombra captada en la <b>escuela</b> por una cámara.');
-  if (lugar==='parque')    banco.add('Hojas trituradas y suelo húmedo en el <b>parque</b>.');
-  if (lugar==='casaMona')  banco.add('Música a bajo volumen en la <b>casa de Mona</b>.');
-  
-  // mezclar (Fisher–Yates)
-  const arr = Array.from(banco);
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  // Pistas sobre arma
+  if (arma==='pala'){
+    banco.push('Hay <b>tierra removida</b> y marcas rectas en el suelo.');
   }
-  return arr;
-}
-
-/* =========================
-   Flujo del caso
-   ========================= */
-function actualizarPills(){
-  el.pillTry.textContent = `Intentos: ${intentosUsados}/${INTENTOS_MAX}`;
-}
-
-function bloquearPorFallo(){
-  el.btnVer.disabled = true;
-  el.btnPista.disabled = true;
-  el.pill.textContent = 'Caso fallido';
-  el.pill.style.background = '#3f1d1d';
-}
-
-function desbloquearControles(){
-  el.btnVer.disabled = false;
-  el.btnPista.disabled = false;
-}
-
-function nuevoCaso(){
-  const culp = aleatorio(suspechosas).id;
-  const arm  = aleatorio(armas).id;
-  const lug  = aleatorio(lugares).id;
-  casoSecreto = { culpable:culp, arma:arm, lugar:lug };
-
-  // preparar pistas únicas
-  poolPistas = construirPistas(casoSecreto);
-  pistasRestantes = poolPistas.length;
-
-  // reset intentos y UI
-  intentosUsados = 0;
-  actualizarPills();
-
-  el.pistas.innerHTML = '';
-  el.res.classList.remove('ok','bad');
-  el.res.innerHTML = '<span class="muted">Aún no has verificado tu hipótesis.</span>';
-  el.historia.innerHTML = narrativaInicial();
-  el.pill.textContent = 'Caso sin resolver';
-  el.pill.style.background = '#0f1636';
-  el.log.innerHTML = '';
-  limpiarSeleccion();
-  desbloquearControles();
-  log(`Nuevo caso creado. Pistas disponibles: ${pistasRestantes}.`);
-}
-
-function generarPista(){
-  if (poolPistas.length === 0){
-    log('No quedan más pistas.');
-    const fin = document.createElement('div');
-    fin.className = 'hint small';
-    fin.innerHTML = '🔎 Ya viste todas las pistas de este caso.';
-    el.pistas.prepend(fin);
-    return;
+  if (arma==='piedra'){
+    banco.push('Se halló <b>polvo de piedra</b> en la ropa.');
   }
-  const pista = poolPistas.shift(); // sin repetición
-  pistasRestantes = poolPistas.length;
+  if (arma==='petardos'){
+    banco.push('Olor a <b>pólvora</b> en el aire, como de un mal recuerdo.');
+  }
+  if (arma==='bate'){
+    banco.push('Una <b>marca curva</b> en una cerca de madera cercana.');
+  }
+  if (arma==='somniferos'){
+    banco.push('Un sobrecito con <b>pastillas trituradas</b> y un vaso desechable.');
+  }
 
+  // Pistas sobre lugar
+  if (lugar==='granero'){
+    banco.push('Se escuchó un golpe <b>dentro del granero</b> en plena noche.');
+  }
+  if (lugar==='patio'){
+    banco.push('Una luz parpadeante en el <b>patio de los DiLaurentis</b> esa noche.');
+  }
+  if (lugar==='escuela'){
+    banco.push('Cámara de seguridad con una sombra en el <b>pasillo de la escuela</b>.');
+  }
+  if (lugar==='parque'){
+    banco.push('Suelo húmedo y <b>hojas trituradas</b> en el parque.');
+  }
+  if (lugar==='casaMona'){
+    banco.push('Se oyó música a bajo volumen en la <b>casa de Mona</b> esa madrugada.');
+  }
+
+  const pista = aleatorio(banco);
   const nodo = document.createElement('div');
-  nodo.className = 'hint small';
+  nodo.className='hint small';
   nodo.innerHTML = `🔎 ${pista} <span class="muted">(${pistasRestantes} pistas restantes)</span>`;
-  el.pistas.prepend(nodo);
-  log('Nueva pista generada (única).');
-}
-
-function verificar(){
-  if (el.btnVer.disabled) return;
-
-  const sel = getSeleccion();
-  if (!sel.sus || !sel.arm || !sel.lug){
-    el.res.classList.remove('ok','bad');
-    el.res.innerHTML = '⚠️ Selecciona sospechosa, arma y locación antes de verificar.';
-    return;
-  }
-  const ok = (sel.sus===casoSecreto.culpable && sel.arm===casoSecreto.arma && sel.lug===casoSecreto.lugar);
-
-  const nSus = sospechosas.find(s=>s.id===casoSecreto.culpable).nombre;
-  const nArm = armas.find(s=>s.id===casoSecreto.arma).nombre;
-  const nLug = lugares.find(s=>s.id===casoSecreto.lugar).nombre;
-
-  if (ok){
-    el.res.classList.remove('bad'); el.res.classList.add('ok');
-    el.res.innerHTML = `
-      ✅ <b>¡Acertaste!</b><br>
-      Culpable: <b>${nSus}</b> · Arma: <b>${nArm}</b> · Lugar: <b>${nLug}</b>.
-      <div class="muted" style="margin-top:6px">Puedes iniciar un nuevo caso para otro final.</div>
-    `;
-    el.pill.textContent = 'Caso resuelto';
-    el.pill.style.background = '#0c4a3e';
-    log('Hipótesis CORRECTA.');
-    el.btnVer.disabled = true; // ya no hace falta verificar más
-    return;
-  }
-
-  // Incorrecto: consumir intento
-  intentosUsados++;
-  actualizarPills();
-
-  const quedan = INTENTOS_MAX - intentosUsados;
-  if (quedan > 0){
-    el.res.classList.remove('ok'); el.res.classList.add('bad');
-    el.res.innerHTML = `
-      ❌ <b>No coincide.</b> Te quedan <b>${quedan}</b> intento(s).<br>
-      Sigue recolectando pistas o ajusta tu hipótesis.
-    `;
-    el.pill.textContent = 'Caso sin resolver';
-    el.pill.style.background = '#0f1636';
-    log(`Hipótesis incorrecta. Quedan ${quedan} intento(s).`);
-  } else {
-    // Sin intentos: fallo definitivo
-    el.res.classList.remove('ok'); el.res.classList.add('bad');
-    el.res.innerHTML = `
-      ❌ <b>Fallaste.</b> <b>A</b> demostró que llevaste a la persona incorrecta a la cárcel.<br>
-      <span class="muted">Caso cerrado. Inicia un <b>Nuevo caso</b> para intentarlo otra vez.</span>
-    `;
-    bloquearPorFallo();
-    log('Sin intentos: caso fallido.');
-  }
-}
-
-function revelar(){
-  const nSus = sospechosas.find(s=>s.id===casoSecreto.culpable).nombre;
-  const nArm = armas.find(s=>s.id===casoSecreto.arma).nombre;
-  const nLug = lugares.find(s=>s.id===casoSecreto.lugar).nombre;
-
-  const final = `
-    <b>Solución revelada</b><br>
-    La culpable fue <b>${nSus}</b>, usando <b>${nArm}</b> en <b>${nLug}</b>.<br>
-    <span class="muted">Este es uno de los cinco posibles finales del caso.</span>
-  `;
-  el.res.classList.remove('bad'); el.res.classList.add('ok');
-  el.res.innerHTML = final;
-  el.pill.textContent = 'Caso resuelto (revelado)';
-  el.pill.style.background = '#334155';
-  log('Solución revelada por el usuario.');
+  pistasDiv.prepend(nodo);
+  log('Nueva pista generada.');
 }
 
 /* =========================
-   Eventos
-   ========================= */
-document.getElementById('btnPista').addEventListener('click', generarPista);
-document.getElementById('btnRevelar').addEventListener('click', revelar);
-document.getElementById('btnNuevo').addEventListener('click', nuevoCaso);
-document.getElementById('btnVerificar').addEventListener('click', verificar);
-document.getElementById('btnLimpiar').addEventListener('click', limpiarSeleccion);
+   Finales (uno por culpable)
+========================= */
+function finalPorCulpable(idCulpable, armaId, lugarId){
+  const armaN = porId(armas, armaId).nombre.toLowerCase();
+  const lugarN = porId(lugares, lugarId).nombre;
 
-/* Init */
-pintarOpciones();
+  const textos = {
+    spencer: `
+      <b>Final: Spencer</b>. El peso del perfeccionismo y el miedo a perder el control la arrinconaron.
+      Aquella noche, una discusión subió de tono. En un impulso, Spencer utilizó <b>${armaN}</b>
+      cerca de <b>${lugarN}</b>. No pretendía llegar tan lejos, pero el secreto la devoró.
+      Entre lealtad y orgullo, eligió callar. "A" siempre lo supo.
+    `,
+    emily: `
+      <b>Final: Emily</b>. La confusión que Alison alimentó con juegos de afecto pasó la raya.
+      El dolor se volvió ira desbordada. Con <b>${armaN}</b> y en <b>${lugarN}</b>, Emily hizo lo impensable.
+      Las lágrimas no borran lo que fue: “A” convirtió su secreto en cadenas.
+    `,
+    aria: `
+      <b>Final: Aria</b>. Guardó el secreto de su padre mientras Alison la empujaba al borde.
+      Aquella noche discutieron; Aria temió perder a su familia y actuó por impulso.
+      <b>${lugarN}</b>, <b>${armaN}</b>, y un silencio que la persigue en cada página que escribe.
+    `,
+    hanna: `
+      <b>Final: Hanna</b>. Años de humillación pasaron factura. Entre rabia y vergüenza,
+      Hanna explotó. En <b>${lugarN}</b>, con <b>${armaN}</b>, descargó un dolor antiguo.
+      La culpa no adelgaza recuerdos. “A” se encargó de que nunca lo olvidara.
+    `,
+    mona: `
+      <b>Final: Mona</b>. La primera "A". Planificó, vigiló, manipuló.
+      Aquella noche, en <b>${lugarN}</b>, <b>${armaN}</b> no fue un accidente: fue un mensaje.
+      Mona no solo quería desaparecer a Alison: quería reescribir el tablero.
+    `
+  };
+  return textos[idCulpable] || '<b>Final no disponible.</b>';
+}
+
+/* =========================
+   UI inicial
+========================= */
+const selC = document.getElementById('selCulpable');
+const selA = document.getElementById('selArma');
+const selL = document.getElementById('selLugar');
+
+function poblarSelects(){
+  selC.innerHTML = sospechosas.map(s=>`<option value="${s.id}">${s.nombre}</option>`).join('');
+  selA.innerHTML = armas.map(a=>`<option value="${a.id}">${a.nombre}</option>`).join('');
+  selL.innerHTML = lugares.map(l=>`<option value="${l.id}">${l.nombre}</option>`).join('');
+}
+
+/* =========================
+   Nuevo caso (random)
+========================= */
+function nuevoCaso(){
+  const culp = aleatorio(sospechosas).id;
+  const arm = aleatorio(armas).id;
+  const lug = aleatorio(lugares).id;
+  casoSecreto = { culpable: culp, arma: arm, lugar: lug };
+  pistasRestantes = 3;
+  pistasDiv.innerHTML = '';
+  resDiv.innerHTML = '';
+  logDiv.innerHTML = '';
+  historiaDiv.innerHTML = narrativaInicial();
+  log('Nuevo caso creado aleatoriamente.');
+}
+
+/* =========================
+   Verificación de acusación
+========================= */
+function acusar(){
+  const pick = {
+    culpable: selC.value,
+    arma: selA.value,
+    lugar: selL.value
+  };
+
+  const correcto = (pick.culpable===casoSecreto.culpable) &&
+                   (pick.arma===casoSecreto.arma) &&
+                   (pick.lugar===casoSecreto.lugar);
+
+  if(correcto){
+    const html = `
+      <div class="ending">
+        <p>✅ <b>¡Acusación correcta!</b></p>
+        <p>${finalPorCulpable(pick.culpable, pick.arma, pick.lugar)}</p>
+      </div>`;
+    resDiv.innerHTML = html;
+    log('La acusación fue correcta.');
+  }else{
+    // dar feedback parcial
+    let tips = [];
+    tips.push(pick.culpable===casoSecreto.culpable ? '✔️ Culpable acertado' : '❌ Culpable incorrecto');
+    tips.push(pick.arma===casoSecreto.arma ? '✔️ Arma acertada' : '❌ Arma incorrecta');
+    tips.push(pick.lugar===casoSecreto.lugar ? '✔️ Lugar acertado' : '❌ Lugar incorrecto');
+
+    resDiv.innerHTML = `
+      <div class="wrong">
+        <p>❌ <b>Acusación incorrecta.</b> Pistas parciales:</p>
+        <ul class="small" style="margin:.25rem 0 .5rem 1rem">
+          ${tips.map(t=>`<li>${t}</li>`).join('')}
+        </ul>
+        <p class="muted small">Puedes generar más pistas (si te quedan) o intentar otra acusación.</p>
+      </div>`;
+    log('Acusación fallida.');
+  }
+}
+
+/* =========================
+   Revelar historia final
+========================= */
+function revelar(){
+  const { culpable, arma, lugar } = casoSecreto;
+  const html = `
+    <div class="ending">
+      <p>🧾 <b>Historia final revelada</b></p>
+      <p><span class="badge">Culpable</span> ${porId(sospechosas, culpable).nombre}</p>
+      <p><span class="badge">Arma</span> ${porId(armas, arma).nombre}</p>
+      <p><span class="badge">Lugar</span> ${porId(lugares, lugar).nombre}</p>
+      <div class="divider"></div>
+      <p>${finalPorCulpable(culpable, arma, lugar)}</p>
+    </div>`;
+  resDiv.innerHTML = html;
+  log('Historia final revelada.');
+}
+
+/* =========================
+   Arranque
+========================= */
+poblarSelects();
 nuevoCaso();
+
+// Botones
+document.getElementById('btnPista').addEventListener('click', generarPista);
+document.getElementById('btnReiniciar').addEventListener('click', nuevoCaso);
+document.getElementById('btnAcusar').addEventListener('click', acusar);
+document.getElementById('btnRevelar').addEventListener('click', revelar);
 </script>
 </body>
 </html>
