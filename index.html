@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Clue — Pretty Little Liars (cap. piloto)</title>
+<title>Clue — Pretty Little Liars </title>
 <style>
   :root{
     --bg:#0b1020; --panel:#131a33; --soft:#202a52; --accent:#9b87f5;
@@ -40,7 +40,7 @@
   .spc{ height:14px }
   .hero-img{ width:min(480px,90%); max-height:280px; object-fit:contain; filter: drop-shadow(0 10px 40px rgba(0,0,0,.45)); }
   .logo{ width:min(360px,75%); display:block; margin:14px auto; }
-  .headline{ font-size:clamp(18px,2.2vw,22px); letter-spacing:1px; margin-top:4px }
+  .headline{ font-size:clamp(40px,2.2vw,22px); letter-spacing:1px; margin-top:4px }
   .tag{ display:inline-block; margin-top:8px; padding:6px 10px; border-radius:999px; background:#0f1636; border:1px solid #2a3576; color:#c7cffc }
   .letter{ display:grid; grid-template-columns: 240px 1fr; gap:18px; align-items:center; }
   @media (max-width:820px){ .letter{ grid-template-columns: 1fr; } .letter .hero-img{ margin:auto; } }
@@ -120,6 +120,12 @@
             <button id="btnNuevo" class="btn" type="button">🌀 Nuevo caso</button>
           </div>
 
+          <div class="previews">
+            <div class="pv"><img id="imgSus" src="./imagenes/placeholder_sus.jpg" alt=""><small id="capSus">Sospechosa</small></div>
+            <div class="pv"><img id="imgArm" src="./imagenes/placeholder_arm.jpg" alt=""><small id="capArm">Arma</small></div>
+            <div class="pv"><img id="imgLug" src="./imagenes/placeholder_lug.jpg" alt=""><small id="capLug">Locación</small></div>
+          </div>
+
           <h3 style="margin:14px 0 6px;color:#c7d2fe">Pistas</h3>
           <div id="pistas" class="hints"></div>
 
@@ -144,12 +150,6 @@
           <div class="card" style="margin-top:10px">
             <h3>Locación</h3>
             <div id="opcLugares"></div>
-          </div>
-
-          <div class="previews">
-            <div class="pv"><img id="imgSus" src="./imagenes/placeholder_sus.jpg" alt=""><small id="capSus">Sospechosa</small></div>
-            <div class="pv"><img id="imgArm" src="./imagenes/placeholder_arm.jpg" alt=""><small id="capArm">Arma</small></div>
-            <div class="pv"><img id="imgLug" src="./imagenes/placeholder_lug.jpg" alt=""><small id="capLug">Locación</small></div>
           </div>
 
           <div class="row" style="margin-top:12px">
