@@ -40,7 +40,7 @@
   .spc{ height:14px }
   .hero-img{ width:min(480px,90%); max-height:280px; object-fit:contain; filter: drop-shadow(0 10px 40px rgba(0,0,0,.45)); }
   .logo{ width:min(360px,75%); display:block; margin:14px auto; }
-  .headline{ font-size:clamp(40px,2.2vw,22px); letter-spacing:1px; margin-top:4px }
+  .headline{ font-size:clamp(60px,2.2vw,22px); letter-spacing:1px; margin-top:4px }
   .tag{ display:inline-block; margin-top:8px; padding:6px 10px; border-radius:999px; background:#0f1636; border:1px solid #2a3576; color:#c7cffc }
   .letter{ display:grid; grid-template-columns: 240px 1fr; gap:18px; align-items:center; }
   @media (max-width:820px){ .letter{ grid-template-columns: 1fr; } .letter .hero-img{ margin:auto; } }
@@ -78,7 +78,7 @@
     <section id="s1" class="screen active panel center">
       <img class="logo" src="./imagenes/logo.jpg" alt="PLL Logo" />
       <div class="headline">ASESINATO DE ALISON DILAURENTIS</div>
-      <span class="tag">Mini Clue · 5 sospechosas · 5 armas · 5 locaciones · 5 finales</span>
+      <span class="tag">Mini Clue · 5 sospechosas · 5 armas · 5 locaciones </span>
       <div class="spc"></div>
       <img class="hero-img" src="./imagenes/portada.jpg" alt="Portada">
       <div class="spc"></div>
@@ -104,14 +104,14 @@
     <!-- ===== Pantalla 3: Tablero del caso ===== -->
     <section id="s3" class="screen panel">
       <header class="row" style="justify-content:space-between; gap:12px;">
-        <div class="title">Clue — Pretty Little Liars (cap. piloto)</div>
+        <div class="title">Clue — Pretty Little Liars </div>
         <span class="pill" id="pillIntentos">Intentos: 3</span>
       </header>
 
       <div class="grid">
         <!-- IZQ -->
         <section>
-          <h3 style="margin:8px 0;color:#c7d2fe">Historia</h3>
+          <h3 style="margin:10px 0;color:#c7d2fe">Historia</h3>
           <div id="historia" class="story"></div>
 
           <div class="row" style="margin-top:10px">
@@ -120,24 +120,24 @@
             <button id="btnNuevo" class="btn" type="button">🌀 Nuevo caso</button>
           </div>
 
-          <div class="previews">
-            <div class="pv"><img id="imgSus" src="./imagenes/placeholder_sus.jpg" alt=""><small id="capSus">Sospechosa</small></div>
-            <div class="pv"><img id="imgArm" src="./imagenes/placeholder_arm.jpg" alt=""><small id="capArm">Arma</small></div>
-            <div class="pv"><img id="imgLug" src="./imagenes/placeholder_lug.jpg" alt=""><small id="capLug">Locación</small></div>
-          </div>
-
           <h3 style="margin:14px 0 6px;color:#c7d2fe">Pistas</h3>
           <div id="pistas" class="hints"></div>
 
           <h3 style="margin:14px 0 6px;color:#c7d2fe">Resultado</h3>
           <div id="resultado" class="result muted">Aún no has verificado tu hipótesis.</div>
 
+          <div class="previews">
+            <div class="pv"><img id="imgSus" src="./imagenes/placeholder_sus.jpg" alt=""><small id="capSus">Sospechosa</small></div>
+            <div class="pv"><img id="imgArm" src="./imagenes/placeholder_arm.jpg" alt=""><small id="capArm">Arma</small></div>
+            <div class="pv"><img id="imgLug" src="./imagenes/placeholder_lug.jpg" alt=""><small id="capLug">Locación</small></div>
+          </div>
+
           <div id="log" class="log"></div>
         </section>
 
         <!-- DER -->
         <aside>
-          <h3 style="margin:8px 0;color:#c7d2fe">Acusación</h3>
+          <h3 style="margin:10px 0;color:#c7d2fe">Acusación</h3>
           <div class="card">
             <h3>Sospechosa</h3>
             <div id="opcSospechosas"></div>
@@ -166,11 +166,11 @@
         <img class="hero-img" src="./imagenes/carta_A_ok.jpg" alt="Carta -A ok">
         <div>
           <div class="stamp ok">CASE CLOSED</div>
-          <h2>Felicidades, nunca dudé de ti.</h2>
+          <h2>Felicidades detective, nunca dudé de ti.</h2>
           <p class="muted">Resolviste el caso dentro de los intentos. Puedes iniciar un nuevo caso para descubrir otros finales.</p>
           <div class="row" style="margin-top:10px">
-            <button class="btn" id="goNuevoDesdeWin" type="button">🌀 Nuevo caso</button>
-            <button class="btn alt" id="goInicioDesdeWin" type="button">🏠 Ir a inicio</button>
+            <button class="btn" id="goNuevoDesdeWin" type="button"> Nuevo caso</button>
+            <button class="btn alt" id="goInicioDesdeWin" type="button"> Ir a inicio</button>
           </div>
         </div>
       </div>
@@ -183,10 +183,10 @@
         <div>
           <div class="stamp bad">WRONG SUSPECT</div>
           <h2>Oh detective…</h2>
-          <p class="muted">Has caído tan bajo que no te diste cuenta que detuviste a la persona incorrecta. Besos — A</p>
+          <p class="muted">Ohh detective has caído tan bajo que no te diste cuenta que detuviste a la persona incorrecta. Besos — A</p>
           <div class="row" style="margin-top:10px">
-            <button class="btn" id="goNuevoDesdeFail" type="button">🌀 Nuevo caso</button>
-            <button class="btn alt" id="goInicioDesdeFail" type="button">🏠 Ir a inicio</button>
+            <button class="btn" id="goNuevoDesdeFail" type="button"> Nuevo caso</button>
+            <button class="btn alt" id="goInicioDesdeFail" type="button"> Ir a inicio</button>
           </div>
         </div>
       </div>
@@ -248,7 +248,7 @@ const cartaTexto = `Rosewood, noche de tormenta. Tú eres el detective a cargo c
 “Detective,
 el caso que dejaron dormir no está muerto. Yo sé dónde yacieron sus restos y quién movió las piezas. Conozco los secretos de sus amigas: Spencer, Emily, Aria y Hanna… secretos que Alison usaba para manejarlas. Si quieres la verdad, tendrás que confiar en mí. Te daré pistas. Si fallas, sabré que no estás a mi altura.”`;
 
-function typewriter(el, text, speed=22){
+function typewriter(el, text, speed=23){
   el.textContent = '';
   let i = 0;
   const tick = () => {
@@ -263,11 +263,11 @@ const sospechosas = [
   { id:'spencer', nombre:'Spencer Hastings', detalle:'Ambiciosa, perfeccionista',
     motivo:'Alison sabía que Spencer besó al novio de su hermana. Alison la chantajeaba con revelar todo.' },
   { id:'emily',   nombre:'Emily Fields', detalle:'Nadadora, sensible',
-    motivo:'Alison jugaba con los sentimientos de Emily y amenazaba con revelar su sexualidad.' },
+    motivo:'Alison jugaba con los sentimientos y la confusión de Emily con ella y amenazaba con revelar su sexualidad.' },
   { id:'aria',    nombre:'Aria Montgomery', detalle:'Creativa, leal',
-    motivo:'Alison sabía de la infidelidad del padre de Aria y la presionaba para contarlo.' },
+    motivo:'Alison sabía de la infidelidad del padre de Aria y la presionaba para contarlo a su familia y a todos.' },
   { id:'hanna',   nombre:'Hanna Marin', detalle:'Popular, vulnerable',
-    motivo:'Los apodos y presión de Alison detonaron desórdenes en Hanna. Motivo de rencor.' },
+    motivo:'Los apodos y presión de Alison detonaron desórdenes alimenticios en Hanna. Motivo de rencor.' },
   { id:'mona',    nombre:'Mona Vanderwaal', detalle:'Inteligente, rencorosa',
     motivo:'Acosada por Alison. Aprendió a manipular desde las sombras. Razones no le faltan.' },
 ];
@@ -290,7 +290,7 @@ let casoSecreto = null;
 let poolPistas = [];
 let intentos = 3;
 
-const el = {
+const el = { 
   s1: document.getElementById('s1'),
   s2: document.getElementById('s2'),
   s3: document.getElementById('s3'),
@@ -319,15 +319,15 @@ const el = {
   btnClr: document.getElementById('btnLimpiar'),
 };
 
-function log(m){ el.log.innerHTML = `<div>• ${m}</div>` + el.log.innerHTML; }
+function log(m){ el.log.innerHTML = `<div>• ${m}</div>` + el.log.innerHTML; } 
 const rnd = arr => arr[Math.floor(Math.random()*arr.length)];
 
 function narrativaInicial(){
   return `
   <b>Rosewood, noche de tormenta.</b> Las cinco amigas se reúnen en el granero de Spencer. Alison llega última;
-  la luz parpadea y, tras dormitar, <b>Alison ya no está</b>. Un año después aparece un cuerpo y pistas que sugieren
-  que no fue un accidente. Todas guardan secretos que Alison conocía… y alguien más lo sabe todo: <b>“A”</b>.<br>
-  <i>¿Quién fue? ¿Con qué arma? ¿Dónde? Tienes 3 intentos.</i>
+  la luz parpadea y, tras dormitar, <b>Alison ya no está</b>. Un año después aparece su cuerpo y pistas que sugieren
+  que no fue un accidente. Todas guardan secretos que Alison conocía… y alguien más lo sabe todo: <b>“-A”</b>.<br>
+  <i>¿Quién fue? ¿Con qué arma? ¿Dónde? Tienes 3 intentos. No falles.</i>
   `;
 }
 
@@ -381,25 +381,67 @@ function limpiarSeleccion(){
 function construirPistas(caso){
   const { culpable, arma, lugar } = caso;
   const s = new Set();
-  if (culpable==='spencer'){ s.add('Perfume caro y barro de jardines cuidados.'); s.add('Huella pequeña y firme cerca de una cerca del granero.'); }
-  if (culpable==='emily'){ s.add('Rastro de cloro de alberca en una sudadera.'); s.add('Una nota arrugada: “No sé cómo decirlo… —E”.'); }
-  if (culpable==='aria'){ s.add('Papel de diario con tinta fresca.'); s.add('Se oyó discusión sobre un secreto familiar.'); }
-  if (culpable==='hanna'){ s.add('Envoltorio de caramelo dietético.'); s.add('Huellas de tacones con pasos nerviosos.'); }
-  if (culpable==='mona'){ s.add('Pendiente con una M y un circuito alterado.'); s.add('Alguien vigilaba cada movimiento del grupo.'); }
-  if (arma==='pala') s.add('Tierra removida en líneas rectas (como de una pala).');
-  if (arma==='piedra') s.add('Polvo de piedra en una manga.');
-  if (arma==='petardos') s.add('Ligero olor a pólvora alrededor.');
-  if (arma==='bate') s.add('Marca curva en madera que sugiere un bate.');
-  if (arma==='somniferos') s.add('Sobrecito con pastillas trituradas y un vaso.');
-  if (lugar==='granero') s.add('Golpe sordo dentro del granero en plena noche.');
-  if (lugar==='patio') s.add('Luz parpadeante en el patio de los DiLaurentis.');
-  if (lugar==='escuela') s.add('Sombra captada en la escuela por una cámara.');
-  if (lugar==='parque') s.add('Hojas trituradas y suelo húmedo en el parque.');
-  if (lugar==='casaMona') s.add('Música a bajo volumen en la casa de Mona.');
+
+  // ===== Pistas según sospechosa =====
+  if (culpable==='spencer'){
+    s.add('Un libro de ética con frases subrayadas sobre “culpa y castigo”.');
+    s.add('Una taza de café medio vacía junto a una lista de tareas sin marcar.');
+    s.add('Se escuchó discutir a alguien con tono frío, pero contenido.');
+  }
+  if (culpable==='emily'){
+    s.add('Una carta rota con la palabra “confusión” escrita varias veces.');
+    s.add('Perfume con olor a sal y cloro, encontrado en una bolsa deportiva.');
+    s.add('Una pulsera con los colores del equipo de natación cerca del estanque.');
+  }
+  if (culpable==='aria'){
+    s.add('Fragmentos de fotografía quemada, parecía ser de una familia.');
+    s.add('Rastro de lápiz labial sobre una servilleta de una cafetería.');
+    s.add('Alguien vio una silueta pequeña observando desde una ventana.');
+  }
+  if (culpable==='hanna'){
+    s.add('Un espejo roto y huellas de maquillaje en el suelo.');
+    s.add('Un ticket de una tienda de moda con fecha de la noche del crimen.');
+    s.add('Restos de perfume dulce, demasiado intenso para el lugar.');
+  }
+  if (culpable==='mona'){
+    s.add('Un dispositivo electrónico desarmado, con un mensaje sin enviar.');
+    s.add('Un frasco de perfume con etiqueta removida, en una bolsa negra.');
+    s.add('Se detectó actividad en una cuenta anónima justo antes del suceso.');
+  }
+
+  // ===== Pistas según arma =====
+  if (arma==='pala') 
+    s.add('Fragmentos de tierra seca bajo las uñas de la víctima.');
+  if (arma==='piedra') 
+    s.add('Polvo gris mezclado con sangre en el borde de una tela.');
+  if (arma==='petardos') 
+    s.add('Olor a humo leve y pequeños fragmentos de papel rojo cerca del lugar.');
+  if (arma==='bate') 
+    s.add('Astillas de madera con manchas oscuras en el suelo.');
+  if (arma==='somniferos') 
+    s.add('Un vaso con residuos blanquecinos y una cucharilla oxidada.');
+
+  // ===== Pistas según lugar =====
+  if (lugar==='granero') 
+    s.add('El reloj del granero se detuvo justo a las 2:47 AM.');
+  if (lugar==='patio') 
+    s.add('El perro de los vecinos ladró sin parar esa noche, mirando al jardín.');
+  if (lugar==='escuela') 
+    s.add('Un casillero fue forzado; dentro, una nota que decía “yo sé la verdad”.');
+  if (lugar==='parque') 
+    s.add('Una linterna encendida fue hallada entre los arbustos mojados.');
+  if (lugar==='casaMona') 
+    s.add('El router doméstico mostró conexión activa a las 3:12 AM.');
+
+  // ===== Mezclar =====
   const arr = Array.from(s);
-  for (let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
-  return arr.slice(0,4);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, 4); // máximo 4 pistas
 }
+
 
 function generarPista(){
   // Si no hay caso aún (por cualquier motivo), crea uno
