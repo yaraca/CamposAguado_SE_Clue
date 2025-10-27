@@ -238,7 +238,7 @@ const ASSETS = {
     piedra:     './imagenes/armas/piedra.jpg',
     petardos:   './imagenes/armas/petardos.jpg',
     bate:       './imagenes/armas/bate.jpg',
-    somniferos: './imagenes/armas/somniferos.jpg',
+    somniferos: './imagenes/armas/somniferos.jpeg',
   },
   lugares: {
     granero:  './imagenes/lugares/granero.jpg',
@@ -268,7 +268,7 @@ const cartaTexto = `Rosewood, noche de tormenta. Tú eres el detective a cargo c
 el caso que dejaron dormir no está muerto. Yo sé dónde yacieron sus restos y quién movió las piezas. Conozco los secretos de sus amigas: Spencer, Emily, Aria y Hanna… secretos que Alison usaba para manejarlas. Si quieres la verdad, tendrás que confiar en mí. Te daré pistas. Si fallas, sabré que no estás a mi altura.”`;
 
 /* --- Utilidad: escribir con máquina de escribir + caret --- */
-function typeText(el, text, speed = 18) {
+function typeText(el, text, speed = 22) {
   return new Promise(resolve => {
     el.textContent = "";
     el.classList.add("tw-caret");
@@ -415,44 +415,44 @@ function construirPistas(caso){
 
   // ===== Pistas según sospechosa =====
   if (culpable==='spencer'){
-    s.add('Un libro de ética con frases subrayadas sobre “culpa y castigo”.');
-    s.add('Una taza de café medio vacía junto a una lista de tareas sin marcar.');
-    s.add('Se escuchó discutir a alguien con tono frío, pero contenido.');
+    s.add('Un libro de ética con frases subrayadas sobre “culpa y castigo”. -A');
+    s.add('Una taza de café medio vacía junto a una lista de tareas sin marcar. -A');
+    s.add('Se escuchó discutir a alguien con tono frío, pero contenido. -A');
   }
   if (culpable==='emily'){
-    s.add('Una carta rota con la palabra “confusión” escrita varias veces.');
-    s.add('Perfume con olor a sal y cloro, encontrado en una bolsa deportiva.');
-    s.add('Una pulsera con los colores del equipo de natación cerca del estanque.');
+    s.add('Una carta rota con la palabra “confusión” escrita varias veces. -A');
+    s.add('Perfume con olor a sal y cloro, encontrado en una bolsa deportiva. -A');
+    s.add('Una pulsera con los colores del equipo de natación cerca del estanque. -A');
   }
   if (culpable==='aria'){
-    s.add('Fragmentos de fotografía quemada, parecía ser de una familia.');
-    s.add('Rastro de lápiz labial sobre una servilleta de una cafetería.');
-    s.add('Alguien vio una silueta pequeña observando desde una ventana.');
+    s.add('Fragmentos de fotografía quemada, parecía ser de una familia. -A');
+    s.add('Rastro de lápiz labial sobre una servilleta de una cafetería. -A');
+    s.add('Alguien vio una silueta pequeña observando desde una ventana. -A');
   }
   if (culpable==='hanna'){
-    s.add('Un espejo roto y huellas de maquillaje en el suelo.');
-    s.add('Un ticket de una tienda de moda con fecha de la noche del crimen.');
-    s.add('Restos de perfume dulce, demasiado intenso para el lugar.');
+    s.add('Un espejo roto y huellas de maquillaje en el suelo. -A');
+    s.add('Un ticket de una tienda de moda con fecha de la noche del crimen. -A');
+    s.add('Restos de perfume dulce, demasiado intenso para el lugar. -A');
   }
   if (culpable==='mona'){
-    s.add('Un dispositivo electrónico desarmado, con un mensaje sin enviar.');
-    s.add('Un frasco de perfume con etiqueta removida, en una bolsa negra.');
-    s.add('Se detectó actividad en una cuenta anónima justo antes del suceso.');
+    s.add('Un dispositivo electrónico desarmado, con un mensaje sin enviar. -A');
+    s.add('Un frasco de perfume con etiqueta removida, en una bolsa negra. -A');
+    s.add('Se detectó actividad en una cuenta anónima justo antes del suceso. -A');
   }
 
   // ===== Pistas según arma =====
-  if (arma==='pala')       s.add('Fragmentos de tierra seca bajo las uñas de la víctima.');
-  if (arma==='piedra')     s.add('Polvo gris mezclado con sangre en el borde de una tela.');
-  if (arma==='petardos')   s.add('Olor a humo leve y pequeños fragmentos de papel rojo cerca del lugar.');
-  if (arma==='bate')       s.add('Astillas de madera con manchas oscuras en el suelo.');
-  if (arma==='somniferos') s.add('Un vaso con residuos blanquecinos y una cucharilla oxidada.');
+  if (arma==='pala')       s.add('Fragmentos de tierra seca bajo las uñas de la víctima. -A');
+  if (arma==='piedra')     s.add('Polvo gris mezclado con sangre en el borde de una tela. -A');
+  if (arma==='petardos')   s.add('Olor a humo leve y pequeños fragmentos de papel rojo cerca del lugar. -A');
+  if (arma==='bate')       s.add('Astillas de madera con manchas oscuras en el suelo. -A');
+  if (arma==='somniferos') s.add('Un vaso con residuos blanquecinos y una cucharilla oxidada. -A');
 
   // ===== Pistas según lugar =====
-  if (lugar==='granero')   s.add('El reloj del granero se detuvo justo a las 2:47 AM.');
-  if (lugar==='patio')     s.add('El perro de los vecinos ladró sin parar esa noche, mirando al jardín.');
-  if (lugar==='escuela')   s.add('Un casillero fue forzado; dentro, una nota que decía “yo sé la verdad”.');
-  if (lugar==='parque')    s.add('Una linterna encendida fue hallada entre los arbustos mojados.');
-  if (lugar==='casaMona')  s.add('El router doméstico mostró conexión activa a las 3:12 AM.');
+  if (lugar==='granero')   s.add('El reloj del granero se detuvo justo a las 2:47 AM. -A');
+  if (lugar==='patio')     s.add('El perro de los vecinos ladró sin parar esa noche, mirando al jardín. -A');
+  if (lugar==='escuela')   s.add('Un casillero fue forzado; dentro, una nota que decía “yo sé la verdad”. -A');
+  if (lugar==='parque')    s.add('Una linterna encendida fue hallada entre los arbustos mojados. -A');
+  if (lugar==='casaMona')  s.add('El router doméstico mostró conexión activa a las 3:12 AM. -A');
 
   // Mezclar
   const arr = Array.from(s);
@@ -476,7 +476,7 @@ async function generarPista(){
       const inner = document.createElement('span');
       fin.appendChild(inner);
       el.pistas.prepend(fin);
-      await typeText(inner, '🔎 Ya viste todas las pistas de este caso.', 16);
+      await typeText(inner, 'Ohh detective, ya viste todas las pistas de este caso. Yo que tú comienzo a pensar más.', 16);
       log('Pistas agotadas.');
       return;
     }
@@ -517,7 +517,7 @@ async function nuevoCaso(){
   el.historia.innerHTML = '';
   const storyLine = document.createElement('div');
   el.historia.appendChild(storyLine);
-  await typeText(storyLine, narrativaInicialTexto(), 12);
+  await typeText(storyLine, narrativaInicialTexto(), 20);
 }
 
 function verificar(){
@@ -559,7 +559,7 @@ async function revelar(){
   el.res.innerHTML = '';
   const cont = document.createElement('div');
   el.res.appendChild(cont);
-  await typeText(cont, `👁️ Solución revelada: ${nSus}, con ${nArm}, en ${nLug}.`, 14);
+  await typeText(cont, ` Solución revelada: ${nSus}, con ${nArm}, en ${nLug}.`, 20);
 
   const sub = document.createElement('div');
   sub.className = 'muted';
