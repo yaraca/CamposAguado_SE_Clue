@@ -41,7 +41,7 @@
   .spc{ height:14px }
   .hero-img{ width:min(480px,90%); max-height:280px; object-fit:contain; filter: drop-shadow(0 10px 40px rgba(0,0,0,.45)); }
   .logo{ width:min(360px,75%); display:block; margin:14px auto; }
-  .headline{ font-size:clamp(60px,2.2vw,22px); letter-spacing:1px; margin-top:4px }
+  .headline{ font-size:clamp(50px,2.2vw,22px); letter-spacing:1px; margin-top:4px }
   .tag{ display:inline-block; margin-top:8px; padding:6px 10px; border-radius:999px; background:#0f1636; border:1px solid #2a3576; color:#c7cffc }
 
   .letter{ display:grid; grid-template-columns: 240px 1fr; gap:18px; align-items:center; }
@@ -268,7 +268,7 @@ const cartaTexto = `Rosewood, noche de tormenta. Tú eres el detective a cargo c
 el caso que dejaron dormir no está muerto. Yo sé dónde yacieron sus restos y quién movió las piezas. Conozco los secretos de sus amigas: Spencer, Emily, Aria y Hanna… secretos que Alison usaba para manejarlas. Si quieres la verdad, tendrás que confiar en mí. Te daré pistas. Si fallas, sabré que no estás a mi altura.”`;
 
 /* --- Utilidad: escribir con máquina de escribir + caret --- */
-function typeText(el, text, speed = 22) {
+function typeText(el, text, speed = 25) {
   return new Promise(resolve => {
     el.textContent = "";
     el.classList.add("tw-caret");
@@ -476,7 +476,7 @@ async function generarPista(){
       const inner = document.createElement('span');
       fin.appendChild(inner);
       el.pistas.prepend(fin);
-      await typeText(inner, 'Ohh detective, ya viste todas las pistas de este caso. Yo que tú comienzo a pensar más.', 16);
+      await typeText(inner, 'Ohh detective, ya viste todas las pistas de este caso. Yo que tú comienzo a pensar más.', 20);
       log('Pistas agotadas.');
       return;
     }
@@ -490,7 +490,7 @@ async function generarPista(){
     nodo.appendChild(inner);
     nodo.appendChild(rest);
     el.pistas.prepend(nodo);
-    await typeText(inner, `🔎 ${pista}`, 16);
+    await typeText(inner, `🔎 ${pista}`, 25);
     rest.textContent = `(${poolPistas.length} restantes)`;
     log('Nueva pista mostrada.');
   });
@@ -517,7 +517,7 @@ async function nuevoCaso(){
   el.historia.innerHTML = '';
   const storyLine = document.createElement('div');
   el.historia.appendChild(storyLine);
-  await typeText(storyLine, narrativaInicialTexto(), 20);
+  await typeText(storyLine, narrativaInicialTexto(), 25);
 }
 
 function verificar(){
@@ -559,13 +559,13 @@ async function revelar(){
   el.res.innerHTML = '';
   const cont = document.createElement('div');
   el.res.appendChild(cont);
-  await typeText(cont, ` Solución revelada: ${nSus}, con ${nArm}, en ${nLug}.`, 20);
+  await typeText(cont, ` Solución revelada: ${nSus}, con ${nArm}, en ${nLug}.`, 25);
 
   const sub = document.createElement('div');
   sub.className = 'muted';
   sub.style.marginTop = '6px';
   el.res.appendChild(sub);
-  await typeText(sub, 'Puedes iniciar un nuevo caso.', 14);
+  await typeText(sub, 'Puedes iniciar un nuevo caso.', 20);
 
   log('Solución revelada por el usuario.');
 }
